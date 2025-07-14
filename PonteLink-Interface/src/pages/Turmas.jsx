@@ -1,4 +1,5 @@
 import "../styles/turmas.css";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Bell, User, Plus } from "lucide-react";
 import dashboardIcon from "../assets/dashboard.png";
@@ -7,8 +8,11 @@ import oficinasIcon from "../assets/oficinas.png";
 import turmasIcon from "../assets/turmas.png";
 import recursosIcon from "../assets/recursos.png";
 import documentosIcon from "../assets/documentos.png";
+import turmasIconLarge from "../assets/turmas.png"; 
 
 export default function Turmas() {
+    const [showModal, setShowModal] = useState(false);
+
     const turmas = [
         {
             escola: "EMEF Santos Dumont",
@@ -62,7 +66,7 @@ export default function Turmas() {
             <main className="dashboard-main-content">
                 <div className="header-turmas">
                     <h2>Turmas Cadastradas</h2>
-                    <button className="btn-purple">
+                    <button className="btn-purple" onClick={() => setShowModal(true)}>
                         <Plus size={16} style={{ marginRight: "6px" }} /> Nova Turma
                     </button>
                 </div>
@@ -99,6 +103,48 @@ export default function Turmas() {
             <footer className="main-footer">
                 <span>© 2025 PonteLink. Todos os direitos reservados.</span>
             </footer>
+
+            {/* Modal */}
+            {showModal && (
+                <div className="modal-overlay">
+                    <div className="modal wide">
+                        <div className="modal-header">
+                            <img src={turmasIconLarge} alt="Icon" />
+                            <h3>Cadastrar Turma</h3>
+                        </div>
+                        <form className="modal-form">
+                            <label>Escola:</label>
+                            <input type="text" placeholder="Nome da Escola" />
+                            <label>Nome da Turma:</label>
+                            <input type="text" placeholder="ex: 5 ano A" />
+                            <div className="form-row">
+                                <div>
+                                    <label>Série:</label>
+                                    <input type="text" />
+                                </div>
+                                <div>
+                                    <label>Turno:</label>
+                                    <input type="text" />
+                                </div>
+                            </div>
+                            <div className="form-row">
+                                <div>
+                                    <label>Número de Alunos:</label>
+                                    <input type="number" />
+                                </div>
+                                <div>
+                                    <label>Professor Responsável:</label>
+                                    <input type="text" />
+                                </div>
+                            </div>
+                            <label>Observação:</label>
+                            <input type="text" placeholder="Informações adicionais sobre a turma" />
+                            <button type="submit" className="btn-purple submit-btn">Cadastrar Turma</button>
+                            <button type="button" className="btn-cancel" onClick={() => setShowModal(false)}>Cancelar</button>
+                        </form>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

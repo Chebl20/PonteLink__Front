@@ -1,4 +1,5 @@
 import "../styles/recursos.css";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Bell, User, Plus } from "lucide-react";
 import dashboardIcon from "../assets/dashboard.png";
@@ -7,8 +8,11 @@ import oficinasIcon from "../assets/oficinas.png";
 import turmasIcon from "../assets/turmas.png";
 import recursosIcon from "../assets/recursos.png";
 import documentosIcon from "../assets/documentos.png";
+import recursosIconLarge from "../assets/recursos.png";
 
 export default function Recursos() {
+    const [showModal, setShowModal] = useState(false);
+
     const recursos = [
         {
             title: "Sala 101",
@@ -64,7 +68,7 @@ export default function Recursos() {
             <main className="dashboard-main-content">
                 <div className="header-recursos">
                     <h2>Gestão de Recursos</h2>
-                    <button className="btn-purple">
+                    <button className="btn-purple" onClick={() => setShowModal(true)}>
                         <Plus size={16} style={{ marginRight: "6px" }} /> Novo Recurso
                     </button>
                 </div>
@@ -92,6 +96,55 @@ export default function Recursos() {
             <footer className="main-footer">
                 <span>© 2025 PonteLink. Todos os direitos reservados.</span>
             </footer>
+
+            {/* Modal */}
+            {showModal && (
+                <div className="modal-overlay">
+                    <div className="modal wide">
+                        <div className="modal-header">
+                            <img src={recursosIconLarge} alt="Icon" />
+                            <h3>Cadastrar Recurso</h3>
+                        </div>
+                        <form className="modal-form">
+                            <label>Quem proverá os recursos:</label>
+                            <div className="form-radio-group">
+                                <div className="form-radio-item">
+                                    <input type="radio" id="escola" name="provedor" value="Escola" defaultChecked />
+                                    <label htmlFor="escola">Escola</label>
+                                </div>
+                                <div className="form-radio-item">
+                                    <input type="radio" id="gestor" name="provedor" value="Gestor da Oficina" />
+                                    <label htmlFor="gestor">Gestor da Oficina</label>
+                                </div>
+                            </div>
+
+
+                            <label>Tipo de Recurso:</label>
+                            <input type="text" placeholder="ex: Equipamento, Laboratório..." />
+
+                            <div className="form-row">
+                                <div>
+                                    <label>Quantidade:</label>
+                                    <input type="number" />
+                                </div>
+                                <div>
+                                    <label>Capacidade:</label>
+                                    <input type="text" />
+                                </div>
+                            </div>
+
+                            <label>Localização:</label>
+                            <input type="text" />
+
+                            <label>Observação:</label>
+                            <input type="text" placeholder="Informações adicionais sobre os recursos" />
+
+                            <button type="submit" className="btn-purple submit-btn">Cadastrar Recurso</button>
+                            <button type="button" className="btn-cancel" onClick={() => setShowModal(false)}>Cancelar</button>
+                        </form>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

@@ -1,4 +1,5 @@
 import "../styles/oficinas.css";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Bell, User, Plus } from "lucide-react";
 import dashboardIcon from "../assets/dashboard.png";
@@ -7,8 +8,11 @@ import oficinasIcon from "../assets/oficinas.png";
 import turmasIcon from "../assets/turmas.png";
 import recursosIcon from "../assets/recursos.png";
 import documentosIcon from "../assets/documentos.png";
+import computadorIcon from "../assets/oficinas.png"; 
 
 export default function Oficinas() {
+    const [showModal, setShowModal] = useState(false);
+
     const oficinas = [
         {
             title: "Robótica Educacional",
@@ -64,7 +68,7 @@ export default function Oficinas() {
             <main className="dashboard-main-content">
                 <div className="header-oficinas">
                     <h2>Planejamento de Oficinas</h2>
-                    <button className="btn-purple">
+                    <button className="btn-purple" onClick={() => setShowModal(true)}>
                         <Plus size={16} style={{ marginRight: "6px" }} /> Nova Oficina
                     </button>
                 </div>
@@ -89,9 +93,50 @@ export default function Oficinas() {
                     ))}
                 </div>
             </main>
+
             <footer className="main-footer">
                 <span>© 2025 PonteLink. Todos os direitos reservados.</span>
             </footer>
+
+            {/* Modal */}
+            {showModal && (
+                <div className="modal-overlay">
+                    <div className="modal wide">
+                        <div className="modal-header">
+                            <img src={computadorIcon} alt="Icon" />
+                            <h3>Planejamento da Oficina</h3>
+                        </div>
+                        <form className="modal-form">
+                            <div className="form-row">
+                                <div>
+                                    <label>Data:</label>
+                                    <input type="date" />
+                                </div>
+                                <div>
+                                    <label>Horário:</label>
+                                    <input type="text" placeholder="Ex: 14:00" />
+                                </div>
+                            </div>
+                            <div className="form-row">
+                                <div>
+                                    <label>Número de Alunos:</label>
+                                    <input type="number" />
+                                </div>
+                                <div>
+                                    <label>Professor Responsável:</label>
+                                    <input type="text" />
+                                </div>
+                            </div>
+                            <label>Turma:</label>
+                            <input type="text" placeholder="ex: NA, A, B, C, D" />
+                            <label>Observação:</label>
+                            <input type="text" placeholder="Informações adicionais sobre a turma" />
+                            <button type="submit" className="btn-purple submit-btn">Cadastrar Oficina</button>
+                            <button type="button" className="btn-cancel" onClick={() => setShowModal(false)}>Cancelar</button>
+                        </form>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
