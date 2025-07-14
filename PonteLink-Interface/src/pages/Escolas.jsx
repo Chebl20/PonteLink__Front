@@ -1,5 +1,6 @@
 import "../styles/escolas.css";
 import { Link } from "react-router-dom";
+import { useState } from "react";
 import { Bell, User, Plus } from "lucide-react";
 import dashboardIcon from "../assets/dashboard.png";
 import escolasIcon from "../assets/escolas.png";
@@ -9,6 +10,8 @@ import recursosIcon from "../assets/recursos.png";
 import documentosIcon from "../assets/documentos.png";
 
 export default function Escolas() {
+    const [showModal, setShowModal] = useState(false);
+
     const escolas = [
         {
             nome: "EMEF Santos Dumont",
@@ -40,35 +43,29 @@ export default function Escolas() {
 
             <div className="nav-bar">
                 <Link to="/dashboard">
-                    <img src={dashboardIcon} alt="Dashboard" />
-                    Dashboard
+                    <img src={dashboardIcon} alt="Dashboard" /> Dashboard
                 </Link>
                 <Link to="/escolas" className="active">
-                    <img src={escolasIcon} alt="Escolas" />
-                    Escolas
+                    <img src={escolasIcon} alt="Escolas" /> Escolas
                 </Link>
                 <Link to="/oficinas">
-                    <img src={oficinasIcon} alt="Oficinas" />
-                    Oficinas
+                    <img src={oficinasIcon} alt="Oficinas" /> Oficinas
                 </Link>
                 <Link to="/turmas">
-                    <img src={turmasIcon} alt="Turmas" />
-                    Turmas
+                    <img src={turmasIcon} alt="Turmas" /> Turmas
                 </Link>
                 <Link to="/recursos">
-                    <img src={recursosIcon} alt="Recursos" />
-                    Recursos
+                    <img src={recursosIcon} alt="Recursos" /> Recursos
                 </Link>
                 <Link to="/documentos">
-                    <img src={documentosIcon} alt="Documentos" />
-                    Documentos
+                    <img src={documentosIcon} alt="Documentos" /> Documentos
                 </Link>
             </div>
 
             <main className="dashboard-main-content">
                 <div className="header-escolas">
                     <h2>Gerenciamento de Escolas</h2>
-                    <button className="btn-purple">
+                    <button className="btn-purple" onClick={() => setShowModal(true)}>
                         <Plus size={16} style={{ marginRight: "6px" }} /> Nova Escola
                     </button>
                 </div>
@@ -104,6 +101,54 @@ export default function Escolas() {
                     </tbody>
                 </table>
 
+                {showModal && (
+                    <div className="modal-overlay">
+                        <div className="modal">
+                            <div className="modal-header">
+                                <img src={escolasIcon} alt="Escola" />
+                                <h3>Cadastrar Escola</h3>
+                            </div>
+                            <form className="modal-form">
+                                <label>Nome Escola:</label>
+                                <input type="text" />
+
+                                <label>Nome do Diretor:</label>
+                                <input type="text" />
+
+                                <div className="form-row">
+                                    <div>
+                                        <label>Telefone:</label>
+                                        <input type="text" />
+                                    </div>
+                                    <div>
+                                        <label>E-mail:</label>
+                                        <input type="email" />
+                                    </div>
+                                </div>
+
+                                <label>Nome do Mediador/Responsável:</label>
+                                <input type="text" />
+
+                                <div className="form-row">
+                                    <div>
+                                        <label>Telefone:</label>
+                                        <input type="text" />
+                                    </div>
+                                    <div>
+                                        <label>E-mail:</label>
+                                        <input type="email" />
+                                    </div>
+                                </div>
+
+                                <label>Localização:</label>
+                                <input type="text" />
+
+                                <button type="submit" className="btn-purple submit-btn">Cadastrar Escola</button>
+                                <button type="button" className="btn-cancel" onClick={() => setShowModal(false)}>Cancelar</button>
+                            </form>
+                        </div>
+                    </div>
+                )}
             </main>
             <footer className="main-footer">
                 <span>© 2025 PonteLink. Todos os direitos reservados.</span>
