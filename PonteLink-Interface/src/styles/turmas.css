@@ -1,0 +1,94 @@
+.header-turmas {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.header-turmas h2 {
+    margin: 0;
+    font-size: 20px;
+    color: #333;
+}
+
+.search-input {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: none;
+    background-color: #eee;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.turmas-table {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.turmas-table-header,
+.turmas-table-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    align-items: center;
+    padding: 12px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.turmas-table-header {
+    font-weight: bold;
+    background: #f2f2f2;
+}
+
+.turmas-table-row div:first-child {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.turmas-table-row img {
+    width: 24px;
+    height: 24px;
+}
+
+.turmas-table-row p {
+    margin: 0;
+    font-size: 12px;
+    color: #666;
+}
+
+.turma-nome {
+    font-weight: 500;
+}
+
+.btn-editar {
+    background: #f0abfc;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    color: #333;
+    font-weight: 500;
+    margin-right: 6px;
+}
+
+.btn-detalhes {
+    background: #c7d2fe;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    color: #333;
+    font-weight: 500;
+}
+
+.btn-editar:hover {
+    background: #e879f9;
+}
+
+.btn-detalhes:hover {
+    background: #a5b4fc;
+}
