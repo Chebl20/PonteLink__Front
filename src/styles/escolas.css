@@ -1,0 +1,211 @@
+/* --- Estilos do Modal e Formulário --- */
+
+/* Fundo semi-transparente que cobre a tela */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Container do formulário (o "card" do modal) */
+.form-container {
+  padding: 24px;
+  width: 100%;
+  max-width: 500px;
+  /* Largura máxima para o formulário */
+  /* A classe .escolas-table já fornece background, border-radius e shadow */
+}
+
+/* Cabeçalho do formulário */
+.header-escolas {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #eee;
+  /* Linha de separação sutil */
+}
+
+.header-escolas h2 {
+  margin: 0;
+  font-size: 20px;
+  color: #333;
+}
+
+/* Botão de fechar (X) */
+.close-button {
+  background: transparent;
+  border: none;
+  font-size: 28px;
+  line-height: 1;
+  color: #888;
+  cursor: pointer;
+}
+
+.close-button:hover {
+  color: #333;
+}
+
+/* Grupo de formulário (label + input) */
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  color: #333;
+}
+
+/* Inputs e Selects do formulário */
+.search-input {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
+  font-size: 14px;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #9333ea;
+  box-shadow: 0 0 0 3px rgba(147, 51, 234, 0.2);
+}
+
+/* Container dos botões de ação */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  /* Alinha botões à direita */
+  gap: 12px;
+  margin-top: 24px;
+}
+
+/* Botão de cancelar (secundário) */
+.btn-cancelar {
+  background-color: #f1f1f1;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px 16px;
+  color: #333;
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn-cancelar:hover {
+  background-color: #e5e5e5;
+}
+
+/* --- Estilos da Tabela (Originais Mantidos) --- */
+
+.escolas-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.escolas-table th,
+.escolas-table td {
+  padding: 12px 16px;
+  text-align: left;
+}
+
+.escolas-table th {
+  background-color: #f9f9f9;
+  color: #333;
+  font-weight: 600;
+}
+
+.escolas-table tr+tr {
+  border-top: 1px solid #ddd;
+}
+
+.status-ativa {
+  display: inline-block;
+  padding: 4px 10px;
+  background-color: #d1fae5;
+  color: #065f46;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.btn-purple {
+  background: linear-gradient(90deg, #6120d1 0%, #9333ea 100%);
+  border: none;
+  border-radius: 8px;
+  padding: 10px 16px;
+  color: #fff;
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-purple:hover {
+  background: linear-gradient(90deg, #6b21a8 0%, #7c3aed 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/*
+ * CSS para criar um modal com conteúdo rolável
+ */
+
+/* 1. Transforma o container do formulário em um layout flexível vertical */
+.form-container {
+  display: flex;
+  flex-direction: column;
+
+  /* 2. Limita a altura máxima do modal a 85% da altura da tela */
+  max-height: 85vh;
+
+  /* Opcional: Define uma largura para o modal */
+  width: 800px;
+  max-width: 95%;
+  /* Garante que não ultrapasse a largura da tela em dispositivos móveis */
+}
+
+/* 3. Faz a área do formulário (o grid) crescer e ser a única parte rolável */
+.form-grid {
+  flex-grow: 1;
+  /* Permite que este elemento cresça e ocupe o espaço disponível */
+  overflow-y: auto;
+  /* A MÁGICA: Adiciona a barra de rolagem vertical SOMENTE se necessário */
+
+  /* Adiciona um preenchimento (padding) para o conteúdo não colar na barra de rolagem */
+  padding-right: 1rem;
+  padding-left: 2px;
+  /* Pequeno ajuste para alinhar com o header */
+}
+
+/* 4. Garante que o cabeçalho e as ações não encolham e não rolem */
+.header-escolas,
+.form-actions {
+  flex-shrink: 0;
+  /* Impede que esses elementos encolham */
+}
+
+/* 5. (Opcional) Adiciona uma pequena borda para separar visualmente as áreas */
+.form-actions {
+  border-top: 1px solid #e2e8f0;
+  padding-top: 1rem;
+  margin-top: 1rem;
+}
