@@ -4,7 +4,7 @@ import {
     createEscola,
     updateEscola,
     deleteEscola
-} from '../services/escolaService.js'; // Verifique se o caminho está correto
+} from '../services/EscolaService.js'; // Verifique se o caminho está correto
 
 export function useEscolas() {
     const [escolas, setEscolas] = useState([]);
