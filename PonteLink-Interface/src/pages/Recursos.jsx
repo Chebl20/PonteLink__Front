@@ -1,101 +1,148 @@
-import "../styles/recursos.css";
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { Bell, User, Plus } from "lucide-react";
-import dashboardIcon from "../assets/dashboard.png";
-import escolasIcon from "../assets/escolas.png";
-import oficinasIcon from "../assets/oficinas.png";
-import turmasIcon from "../assets/turmas.png";
-import recursosIcon from "../assets/recursos.png";
-import documentosIcon from "../assets/documentos.png";
+import React, { useState } from "react";
+import { Plus } from "lucide-react";
+import PageLayout from '../components/PageLayout';
+import { useRecursos } from '../hooks/useRecurso';
 import recursosIconLarge from "../assets/recursos.png";
+import "../styles/recursos.css";
 
 export default function Recursos() {
-    const [showModal, setShowModal] = useState(false);
+    const {
+        recursos,
+        loading,
+        error,
+        addRecurso,
+        editRecurso,
+        removeRecurso,
+        showModal,
+        setShowModal
+    } = useRecursos();
+    
+    const [formData, setFormData] = useState({
+        provedor: 'Escola',
+        tipoRecurso: '',
+        quantidade: '',
+        capacidade: '',
+        localizacao: '',
+        observacao: ''
+    });
+    const [recursoToEdit, setRecursoToEdit] = useState(null);
+    const [searchTerm, setSearchTerm] = useState('');
 
-    const recursos = [
-        {
-            title: "Sala 101",
-            escola: "E.M. João da Silva",
-            local: "Bloco A, 1º andar",
-            capacidade: "25 alunos",
-            tipo: "Sala",
-        },
-        {
-            title: "Laboratório de Informática",
-            escola: "E.E. Maria Santos",
-            local: "Bloco B, 2º andar",
-            capacidade: "25 alunos",
-            tipo: "laboratório",
-        },
-    ];
+    // Filtrar recursos baseado na busca
+    const recursosFiltrados = recursos.filter(recurso =>
+        recurso.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        recurso.escola?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        recurso.tipo?.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        
+        const recursoData = {
+            ...formData,
+            title: formData.tipoRecurso || 'Novo Recurso',
+            escola: formData.provedor === 'Escola' ? 'Escola Padrão' : 'Gestor da Oficina',
+            local: formData.localizacao,
+            capacidade: `${formData.capacidade} alunos`,
+            tipo: formData.tipoRecurso
+        };
+
+        if (recursoToEdit) {
+            editRecurso(recursoToEdit.id, recursoData);
+        } else {
+            addRecurso(recursoData);
+        }
+
+        // Limpar formulário
+        setFormData({
+            provedor: 'Escola',
+            tipoRecurso: '',
+            quantidade: '',
+            capacidade: '',
+            localizacao: '',
+            observacao: ''
+        });
+        setRecursoToEdit(null);
+        setShowModal(false);
+    };
+
+    const handleEdit = (recurso) => {
+        setRecursoToEdit(recurso);
+        setFormData({
+            provedor: recurso.escola?.includes('Gestor') ? 'Gestor da Oficina' : 'Escola',
+            tipoRecurso: recurso.tipo || '',
+            quantidade: recurso.quantidade || '',
+            capacidade: recurso.capacidade?.replace(' alunos', '') || '',
+            localizacao: recurso.local || '',
+            observacao: recurso.observacao || ''
+        });
+        setShowModal(true);
+    };
+
+    const handleDelete = (id) => {
+        if (window.confirm('Tem certeza que deseja excluir este recurso?')) {
+            removeRecurso(id);
+        }
+    };
 
     return (
-        <div className="dashboard-page">
-            <div className="top-bar">
-                <div className="logo">PonteLink</div>
-                <div className="header-actions">
-                    <button className="notif-btn">
-                        <Bell size={18} color="#f3d512" /> Notificações
-                    </button>
-                    <button className="admin-btn">
-                        <User size={18} /> Gestor Admin
-                    </button>
-                </div>
+        <PageLayout className="recursos-page">
+            <div className="page-header">
+                <h2>Gestão de Recursos</h2>
+                <button className="btn-purple" onClick={() => {
+                    setRecursoToEdit(null);
+                    setFormData({
+                        provedor: 'Escola',
+                        tipoRecurso: '',
+                        quantidade: '',
+                        capacidade: '',
+                        localizacao: '',
+                        observacao: ''
+                    });
+                    setShowModal(true);
+                }}>
+                    <Plus size={16} /> Novo Recurso
+                </button>
             </div>
 
-            <div className="nav-bar">
-                <Link to="/dashboard">
-                    <img src={dashboardIcon} alt="Dashboard" /> Dashboard
-                </Link>
-                <Link to="/escolas">
-                    <img src={escolasIcon} alt="Escolas" /> Escolas
-                </Link>
-                <Link to="/oficinas">
-                    <img src={oficinasIcon} alt="Oficinas" /> Oficinas
-                </Link>
-                <Link to="/turmas">
-                    <img src={turmasIcon} alt="Turmas" /> Turmas
-                </Link>
-                <Link to="/recursos" className="active">
-                    <img src={recursosIcon} alt="Recursos" /> Recursos
-                </Link>
-                <Link to="/documentos">
-                    <img src={documentosIcon} alt="Documentos" /> Documentos
-                </Link>
-            </div>
+            <input 
+                type="text" 
+                className="search-input" 
+                placeholder="Buscar Recursos..." 
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+            />
 
-            <main className="dashboard-main-content">
-                <div className="header-recursos">
-                    <h2>Gestão de Recursos</h2>
-                    <button className="btn-purple" onClick={() => setShowModal(true)}>
-                        <Plus size={16} style={{ marginRight: "6px" }} /> Novo Recurso
-                    </button>
-                </div>
+            {loading && <p>Carregando recursos...</p>}
+            {error && <p style={{ color: 'red' }}>Erro: {error}</p>}
 
-                <input type="text" className="search-input" placeholder="Buscar Recursos..." />
-
+            {!loading && !error && (
                 <div className="recursos-grid">
-                    {recursos.map((recurso, idx) => (
-                        <div key={idx} className="recurso-card">
-                            <div className="recurso-card-header">
-                                <h3>{recurso.title}</h3>
-                                <span className="tipo-tag">{recurso.tipo}</span>
-                            </div>
-                            <p>{recurso.escola}</p>
-                            <p>{recurso.local}</p>
-                            <p><strong>Capacidade:</strong> {recurso.capacidade}</p>
-                            <div className="recurso-card-buttons">
-                                <button className="btn-editar">Editar</button>
-                                <button className="btn-detalhes">Ver Detalhes</button>
-                            </div>
+                    {recursosFiltrados.length === 0 ? (
+                        <div className="empty-state">
+                            <p>Nenhum recurso encontrado</p>
                         </div>
-                    ))}
+                    ) : (
+                        recursosFiltrados.map((recurso) => (
+                            <div key={recurso.id} className="recurso-card">
+                                <div className="recurso-card-header">
+                                    <h3>{recurso.title}</h3>
+                                    <span className="tipo-tag">{recurso.tipo}</span>
+                                </div>
+                                <p>{recurso.escola}</p>
+                                <p>{recurso.local}</p>
+                                <p><strong>Capacidade:</strong> {recurso.capacidade}</p>
+                                <div className="recurso-card-buttons">
+                                    <button className="btn-editar" onClick={() => handleEdit(recurso)}>
+                                        Editar
+                                    </button>
+                                    <button className="btn-detalhes">Ver Detalhes</button>
+                                </div>
+                            </div>
+                        ))
+                    )}
                 </div>
-            </main>
-            <footer className="main-footer">
-                <span>© 2025 PonteLink. Todos os direitos reservados.</span>
-            </footer>
+            )}
 
             {/* Modal */}
             {showModal && (
@@ -103,48 +150,104 @@ export default function Recursos() {
                     <div className="modal wide">
                         <div className="modal-header">
                             <img src={recursosIconLarge} alt="Icon" />
-                            <h3>Cadastrar Recurso</h3>
+                            <h3>{recursoToEdit ? 'Editar Recurso' : 'Cadastrar Recurso'}</h3>
                         </div>
-                        <form className="modal-form">
+                        <form className="modal-form" onSubmit={handleSubmit}>
                             <label>Quem proverá os recursos:</label>
                             <div className="form-radio-group">
                                 <div className="form-radio-item">
-                                    <input type="radio" id="escola" name="provedor" value="Escola" defaultChecked />
+                                    <input 
+                                        type="radio" 
+                                        id="escola" 
+                                        name="provedor" 
+                                        value="Escola" 
+                                        checked={formData.provedor === 'Escola'}
+                                        onChange={(e) => setFormData({...formData, provedor: e.target.value})}
+                                    />
                                     <label htmlFor="escola">Escola</label>
                                 </div>
                                 <div className="form-radio-item">
-                                    <input type="radio" id="gestor" name="provedor" value="Gestor da Oficina" />
+                                    <input 
+                                        type="radio" 
+                                        id="gestor" 
+                                        name="provedor" 
+                                        value="Gestor da Oficina"
+                                        checked={formData.provedor === 'Gestor da Oficina'}
+                                        onChange={(e) => setFormData({...formData, provedor: e.target.value})}
+                                    />
                                     <label htmlFor="gestor">Gestor da Oficina</label>
                                 </div>
                             </div>
 
-
                             <label>Tipo de Recurso:</label>
-                            <input type="text" placeholder="ex: Equipamento, Laboratório..." />
+                            <input 
+                                type="text" 
+                                placeholder="ex: Equipamento, Laboratório..." 
+                                value={formData.tipoRecurso}
+                                onChange={(e) => setFormData({...formData, tipoRecurso: e.target.value})}
+                                required
+                            />
 
                             <div className="form-row">
                                 <div>
                                     <label>Quantidade:</label>
-                                    <input type="number" />
+                                    <input 
+                                        type="number" 
+                                        value={formData.quantidade}
+                                        onChange={(e) => setFormData({...formData, quantidade: e.target.value})}
+                                        required
+                                    />
                                 </div>
                                 <div>
                                     <label>Capacidade:</label>
-                                    <input type="text" />
+                                    <input 
+                                        type="text" 
+                                        placeholder="Ex: 25"
+                                        value={formData.capacidade}
+                                        onChange={(e) => setFormData({...formData, capacidade: e.target.value})}
+                                        required
+                                    />
                                 </div>
                             </div>
 
                             <label>Localização:</label>
-                            <input type="text" />
+                            <input 
+                                type="text" 
+                                placeholder="Ex: Bloco A, 1º andar"
+                                value={formData.localizacao}
+                                onChange={(e) => setFormData({...formData, localizacao: e.target.value})}
+                                required
+                            />
 
                             <label>Observação:</label>
-                            <input type="text" placeholder="Informações adicionais sobre os recursos" />
+                            <input 
+                                type="text" 
+                                placeholder="Informações adicionais sobre os recursos" 
+                                value={formData.observacao}
+                                onChange={(e) => setFormData({...formData, observacao: e.target.value})}
+                            />
 
-                            <button type="submit" className="btn-purple submit-btn">Cadastrar Recurso</button>
-                            <button type="button" className="btn-cancel" onClick={() => setShowModal(false)}>Cancelar</button>
+                            <button type="submit" className="btn-purple submit-btn">
+                                {recursoToEdit ? 'Atualizar Recurso' : 'Cadastrar Recurso'}
+                            </button>
+                            <button type="button" className="btn-cancel" onClick={() => {
+                                setShowModal(false);
+                                setRecursoToEdit(null);
+                                setFormData({
+                                    provedor: 'Escola',
+                                    tipoRecurso: '',
+                                    quantidade: '',
+                                    capacidade: '',
+                                    localizacao: '',
+                                    observacao: ''
+                                });
+                            }}>
+                                Cancelar
+                            </button>
                         </form>
                     </div>
                 </div>
             )}
-        </div>
+        </PageLayout>
     );
 }
