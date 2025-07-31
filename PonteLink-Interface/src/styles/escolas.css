@@ -24,6 +24,67 @@
 }
 
 /* Cabeçalho do formulário */
+.header-escolas-page {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 28px;
+  padding: 20px 0;
+  border-bottom: 2px solid #f1f5f9;
+  position: relative;
+}
+
+.header-escolas-page::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 60px;
+  height: 2px;
+  background: #7c3aed;
+  border-radius: 1px;
+}
+
+.header-escolas-page h2 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 600;
+  color: #1e293b;
+  letter-spacing: -0.025em;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.header-escolas-page h2::before {
+  content: '';
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, #7c3aed, #a855f7);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  position: relative;
+}
+
+.header-escolas-page h2::before {
+  content: '';
+  background: #ffffff url('../assets/escolas.png') center/cover no-repeat;
+  width: 40px;
+  height: 40px;
+  border: 6px solid #ffffff;
+  font-size: 18px;
+}
+
+/* Área de ações */
+.header-escolas-page .actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
 .header-escolas {
   display: flex;
   justify-content: space-between;
@@ -112,30 +173,251 @@
 
 /* --- Estilos da Tabela (Originais Mantidos) --- */
 
+/* Container da tabela */
+.table-container {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid #f1f5f9;
+}
+
+/* Tabela principal */
 .escolas-table {
   width: 100%;
   border-collapse: collapse;
-  background-color: #fff;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  font-size: 14px;
 }
 
-.escolas-table th,
-.escolas-table td {
-  padding: 12px 16px;
-  text-align: left;
+/* Cabeçalho da tabela */
+.escolas-table thead {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border-bottom: 2px solid #e2e8f0;
 }
 
 .escolas-table th {
-  background-color: #f9f9f9;
-  color: #333;
+  padding: 16px 20px;
+  text-align: left;
   font-weight: 600;
+  color: #374151;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  position: relative;
 }
 
-.escolas-table tr+tr {
-  border-top: 1px solid #ddd;
+.escolas-table th:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 20%;
+  height: 60%;
+  width: 1px;
+  background: #e2e8f0;
 }
+
+/* Células do corpo */
+.escolas-table td {
+  padding: 18px 20px;
+  color: #4b5563;
+  border-bottom: 1px solid #f1f5f9;
+  vertical-align: middle;
+  line-height: 1.5;
+}
+
+/* Linhas da tabela */
+.escolas-table tbody tr {
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.escolas-table tbody tr:hover {
+  background: linear-gradient(135deg, #fefefe 0%, #f8fafc 100%);
+  transform: translateY(-1px);
+}
+
+/* Estilização específica para colunas */
+.escolas-table td:first-child {
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.escolas-table td:nth-child(2) {
+  max-width: 200px;
+  font-size: 13px;
+  color: #6b7280;
+  line-height: 1.4;
+}
+
+/* Área de ações */
+.actions-cell {
+  white-space: nowrap;
+}
+
+.actions-buttons {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* Botões de ação */
+.btn-action {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 70px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-action::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.btn-action:hover::before {
+  left: 100%;
+}
+
+/* Botão Editar */
+.btn-editar {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  color: white;
+  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+}
+
+.btn-editar:hover {
+  background: linear-gradient(135deg, #1d4ed8, #1e40af);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);
+}
+
+/* Botão Detalhes */
+.btn-detalhes {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  box-shadow: 0 2px 4px rgba(16, 185, 129, 0.2);
+}
+
+.btn-detalhes:hover {
+  background: linear-gradient(135deg, #059669, #047857);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3);
+}
+
+/* Botão Remover */
+.btn-remover {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: white;
+  box-shadow: 0 2px 4px rgba(239, 68, 68, 0.2);
+}
+
+.btn-remover:hover {
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(239, 68, 68, 0.3);
+}
+
+/* Estados vazios */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: #6b7280;
+}
+
+.empty-state-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  opacity: 0.6;
+}
+
+.empty-state h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0 0 8px 0;
+  color: #374151;
+}
+
+.empty-state p {
+  margin: 0;
+  font-size: 14px;
+}
+
+/* Responsividade */
+@media (max-width: 1024px) {
+  .escolas-table th,
+  .escolas-table td {
+    padding: 12px 16px;
+  }
+  
+  .escolas-table td:nth-child(2) {
+    max-width: 150px;
+  }
+  
+  .actions-buttons {
+    gap: 6px;
+  }
+  
+  .btn-action {
+    padding: 6px 12px;
+    font-size: 11px;
+    min-width: 60px;
+  }
+}
+
+@media (max-width: 768px) {
+  .table-container {
+    border-radius: 12px;
+    margin: 0 -16px;
+  }
+  
+  .escolas-table {
+    font-size: 13px;
+  }
+  
+  .escolas-table th,
+  .escolas-table td {
+    padding: 10px 12px;
+  }
+  
+  .escolas-table th {
+    font-size: 12px;
+  }
+  
+  /* Ocultar colunas menos importantes em mobile */
+  .escolas-table th:nth-child(3),
+  .escolas-table td:nth-child(3),
+  .escolas-table th:nth-child(4),
+  .escolas-table td:nth-child(4),
+  .escolas-table th:nth-child(6),
+  .escolas-table td:nth-child(6) {
+    display: none;
+  }
+  
+  .actions-buttons {
+    flex-direction: column;
+    gap: 4px;
+  }
+  
+  .btn-action {
+    width: 100%;
+    padding: 8px 12px;
+  }
+}
+
+
 
 .status-ativa {
   display: inline-block;
@@ -173,15 +455,19 @@
 .form-container {
   display: flex;
   flex-direction: column;
-
-  /* 2. Limita a altura máxima do modal a 85% da altura da tela */
   max-height: 85vh;
-
-  /* Opcional: Define uma largura para o modal */
   width: 800px;
   max-width: 95%;
-  /* Garante que não ultrapasse a largura da tela em dispositivos móveis */
+
+  /* ADICIONE ESTA LINHA: */
+  background-color: #ffffff;
+
+  /* Outras propriedades já existentes */
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
 }
+
 
 /* 3. Faz a área do formulário (o grid) crescer e ser a única parte rolável */
 .form-grid {
@@ -209,3 +495,4 @@
   padding-top: 1rem;
   margin-top: 1rem;
 }
+

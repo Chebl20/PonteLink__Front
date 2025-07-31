@@ -17,6 +17,7 @@ import EscolaDetalhes from '../components/escola/EscolaDetalhes.jsx';
 import TopBar from '../components/TopBar.jsx';
 
 import NavBar from '../components/NavBar.jsx';
+import escolasIcon from "../assets/escolas.png";
 
 import { Plus } from 'lucide-react';
 
@@ -142,7 +143,7 @@ export default function EscolasPage() {
 
             <main className="dashboard-main-content">
 
-                <div className="header-escolas">
+                <div className="header-escolas-page">
 
                     <h2>Gerenciamento de Escolas</h2>
 
