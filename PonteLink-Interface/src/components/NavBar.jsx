@@ -1,6 +1,7 @@
 // src/components/NavBar.jsx
-import React from 'react';
-import { NavLink } from 'react-router-dom'; // Importe NavLink em vez de Link
+import React, { useState, useEffect } from 'react';
+import { NavLink, useLocation } from 'react-router-dom';
+import { Menu, X } from 'lucide-react';
 
 // Importe os ícones necessários
 import dashboardIcon from "../assets/dashboard.png";
@@ -11,26 +12,56 @@ import recursosIcon from "../assets/recursos.png";
 import documentosIcon from "../assets/documentos.png";
 
 export default function NavBar() {
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const location = useLocation();
+
+    // Fecha o menu quando a rota muda
+    useEffect(() => {
+        setMobileMenuOpen(false);
+    }, [location]);
+
+    const navItems = [
+        { path: '/dashboard', icon: dashboardIcon, label: 'Dashboard' },
+        { path: '/escolas', icon: escolasIcon, label: 'Escolas' },
+        { path: '/oficinas', icon: oficinasIcon, label: 'Oficinas' },
+        { path: '/turmas', icon: turmasIcon, label: 'Turmas' },
+        { path: '/recursos', icon: recursosIcon, label: 'Recursos' },
+        { path: '/documentos', icon: documentosIcon, label: 'Documentos' },
+    ];
+
     return (
-        <div className="nav-bar">
-            <NavLink to="/dashboard">
-                <img src={dashboardIcon} alt="Dashboard" /> Dashboard
-            </NavLink>
-            <NavLink to="/escolas">
-                <img src={escolasIcon} alt="Escolas" /> Escolas
-            </NavLink>
-            <NavLink to="/oficinas">
-                <img src={oficinasIcon} alt="Oficinas" /> Oficinas
-            </NavLink>
-            <NavLink to="/turmas">
-                <img src={turmasIcon} alt="Turmas" /> Turmas
-            </NavLink>
-            <NavLink to="/recursos">
-                <img src={recursosIcon} alt="Recursos" /> Recursos
-            </NavLink>
-            <NavLink to="/documentos">
-                <img src={documentosIcon} alt="Documentos" /> Documentos
-            </NavLink>
-        </div>
+        <>
+            {/* Botão Menu Mobile */}
+            <button
+                className="mobile-menu-toggle"
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                aria-label="Toggle menu"
+            >
+                {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+
+            {/* Overlay Mobile */}
+            {mobileMenuOpen && (
+                <div
+                    className="mobile-menu-overlay"
+                    onClick={() => setMobileMenuOpen(false)}
+                />
+            )}
+
+            {/* Barra de Navegação */}
+            <nav className={`nav-bar ${mobileMenuOpen ? 'mobile-open' : ''}`}>
+                {navItems.map((item) => (
+                    <NavLink
+                        key={item.path}
+                        to={item.path}
+                        className={({ isActive }) => isActive ? 'active' : ''}
+                        onClick={() => setMobileMenuOpen(false)}
+                    >
+                        <img src={item.icon} alt={item.label} />
+                        <span>{item.label}</span>
+                    </NavLink>
+                ))}
+            </nav>
+        </>
     );
 }

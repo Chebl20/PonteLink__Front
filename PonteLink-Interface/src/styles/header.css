@@ -1,0 +1,27 @@
+/* src/styles/header.css */
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    background: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: 700;
+    color: #5B3F9E;
+    /* Removido margin-left */
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .logo {
+        margin-left: 50px;
+        /* Espaço para o botão menu APENAS em mobile */
+    }
+}

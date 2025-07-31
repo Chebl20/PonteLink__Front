@@ -1,0 +1,170 @@
+/* src/styles/navbar.css */
+
+/* Botão Menu Mobile */
+.mobile-menu-toggle {
+    display: none;
+    position: fixed;
+    top: 16px;
+    left: 16px;
+    z-index: 1001;
+    background: white;
+    border: 1px solid #E5E7EB;
+    border-radius: 8px;
+    padding: 8px;
+    cursor: pointer;
+    color: #5B3F9E;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+}
+
+.mobile-menu-toggle:hover {
+    background: #F5F3FF;
+    border-color: #5B3F9E;
+}
+
+/* Overlay Mobile */
+.mobile-menu-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+/* Barra de Navegação - Desktop */
+.nav-bar {
+    display: flex;
+    background: white;
+    padding: 8px 16px;
+    gap: 8px;
+    overflow-x: auto;
+    border-bottom: 1px solid #E5E7EB;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Links de Navegação */
+.nav-bar a {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    text-decoration: none;
+    color: #6B7280;
+    border-radius: 8px;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.nav-bar a:hover {
+    background: #F9FAFB;
+    color: #5B3F9E;
+}
+
+.nav-bar a.active {
+    background: #F5F3FF;
+    color: #5B3F9E;
+    font-weight: 600;
+}
+
+.nav-bar a img {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+
+    /* Mostra botão menu */
+    .mobile-menu-toggle {
+        display: block;
+    }
+
+    /* Mostra overlay quando menu aberto */
+    .mobile-menu-overlay {
+        display: block;
+    }
+
+    /* NavBar vira sidebar */
+    .nav-bar {
+        position: fixed;
+        top: 0;
+        left: -280px;
+        /* Escondido por padrão */
+        width: 280px;
+        height: 100vh;
+        flex-direction: column;
+        padding: 80px 16px 16px;
+        gap: 4px;
+        overflow-y: auto;
+        transition: left 0.3s ease;
+        z-index: 1000;
+        box-shadow: 2px 0 20px rgba(0, 0, 0, 0.1);
+        border-right: 1px solid #E5E7EB;
+    }
+
+    /* Quando menu aberto */
+    .nav-bar.mobile-open {
+        left: 0;
+        /* Mostra o menu */
+    }
+
+    .nav-bar a {
+        width: 100%;
+        padding: 14px 16px;
+        font-size: 15px;
+    }
+
+    .nav-bar a.active {
+        border-left: 4px solid #5B3F9E;
+        background: linear-gradient(to right, #F5F3FF 0%, #FAFAFF 100%);
+    }
+}
+
+/* Tablet e Desktop */
+@media (min-width: 769px) {
+
+    /* Esconde elementos mobile */
+    .mobile-menu-toggle {
+        display: none !important;
+    }
+
+    .mobile-menu-overlay {
+        display: none !important;
+    }
+
+    /* NavBar normal */
+    .nav-bar {
+        position: static;
+        left: auto;
+        width: auto;
+        height: auto;
+        flex-direction: row;
+        padding: 12px 24px;
+        box-shadow: none;
+        border-right: none;
+    }
+}
+
+/* Desktop grande */
+@media (min-width: 1025px) {
+    .nav-bar {
+        padding: 16px 32px;
+        gap: 16px;
+    }
+
+    .nav-bar a {
+        padding: 12px 24px;
+        font-size: 15px;
+    }
+
+    .nav-bar a:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+}
