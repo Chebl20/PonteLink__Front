@@ -1,32 +1,87 @@
 import "../styles/turmas.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Bell, User, Plus } from "lucide-react";
+import { Bell, User, Plus, Loader2, X, Trash2 } from "lucide-react";
 import dashboardIcon from "../assets/dashboard.png";
 import escolasIcon from "../assets/escolas.png";
 import oficinasIcon from "../assets/oficinas.png";
 import turmasIcon from "../assets/turmas.png";
 import recursosIcon from "../assets/recursos.png";
 import documentosIcon from "../assets/documentos.png";
-import turmasIconLarge from "../assets/turmas.png"; 
+import turmasIconLarge from "../assets/turmas.png";
+import { supabase } from "../supaBaseClient";
+
+const initialForm = {
+    escola_id: "",
+    nome: "",
+    serie: "",
+    turno: "",
+    numero_alunos: "",
+    professor_responsavel: "",
+    observacao: ""
+};
 
 export default function Turmas() {
     const [showModal, setShowModal] = useState(false);
+    const [modalType, setModalType] = useState("add"); // add | edit | details
+    const [selected, setSelected] = useState(null);
+    const [turmas, setTurmas] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
+    const [form, setForm] = useState(initialForm);
+    const [search, setSearch] = useState("");
 
-    const turmas = [
-        {
-            escola: "EMEF Santos Dumont",
-            endereco: "Rua das Flores, 123",
-            turma: "5 ano A",
-            turno: "Manhã",
-        },
-        {
-            escola: "Colégio Dom Pedro",
-            endereco: "Av. Principal, 456",
-            turma: "7 ano B",
-            turno: "Tarde",
-        },
-    ];
+    useEffect(() => {
+        fetchTurmas();
+    }, []);
+
+    async function fetchTurmas() {
+        setLoading(true);
+        setError("");
+        let query = supabase.from('turmas').select('*').order('nome', { ascending: true });
+        if (search) query = query.ilike('nome', `%${search}%`);
+        const { data, error } = await query;
+        if (error) setError("Erro ao buscar turmas");
+        else setTurmas(data);
+        setLoading(false);
+    }
+
+    function openModal(type, turma=null) {
+        setModalType(type);
+        setShowModal(true);
+        setSelected(turma);
+        setForm(turma ? {
+            ...turma
+        } : initialForm);
+    }
+
+    function closeModal() {
+        setShowModal(false);
+        setSelected(null);
+        setForm(initialForm);
+    }
+
+    async function handleSubmit(e) {
+        e.preventDefault();
+        setLoading(true);
+        setError("");
+        if (modalType === "add") {
+            const { error } = await supabase.from('turmas').insert([form]);
+            if (error) setError("Erro ao cadastrar turma");
+        } else if (modalType === "edit" && selected) {
+            const { error } = await supabase.from('turmas').update(form).eq('id', selected.id);
+            if (error) setError("Erro ao atualizar turma");
+        }
+        closeModal();
+        fetchTurmas();
+    }
+
+    async function handleDelete(id) {
+        if (!window.confirm("Deseja realmente excluir esta turma?")) return;
+        setLoading(true);
+        await supabase.from('turmas').delete().eq('id', id);
+        fetchTurmas();
+    }
 
     return (
         <div className="dashboard-page">

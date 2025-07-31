@@ -1,7 +1,7 @@
 import "../styles/recursos.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Bell, User, Plus } from "lucide-react";
+import { Bell, User, Plus, Loader2, X, Trash2 } from "lucide-react";
 import dashboardIcon from "../assets/dashboard.png";
 import escolasIcon from "../assets/escolas.png";
 import oficinasIcon from "../assets/oficinas.png";
@@ -9,26 +9,78 @@ import turmasIcon from "../assets/turmas.png";
 import recursosIcon from "../assets/recursos.png";
 import documentosIcon from "../assets/documentos.png";
 import recursosIconLarge from "../assets/recursos.png";
+import { supabase } from "../supaBaseClient";
+
+const initialForm = {
+    escola_id: "",
+    tipo_recurso: "",
+    capacidade_sala: "",
+    tipo_acesso_internet: "",
+    localizacao: "",
+    observacao: ""
+};
 
 export default function Recursos() {
     const [showModal, setShowModal] = useState(false);
+    const [modalType, setModalType] = useState("add"); // add | edit | details
+    const [selected, setSelected] = useState(null);
+    const [recursos, setRecursos] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
+    const [form, setForm] = useState(initialForm);
+    const [search, setSearch] = useState("");
 
-    const recursos = [
-        {
-            title: "Sala 101",
-            escola: "E.M. João da Silva",
-            local: "Bloco A, 1º andar",
-            capacidade: "25 alunos",
-            tipo: "Sala",
-        },
-        {
-            title: "Laboratório de Informática",
-            escola: "E.E. Maria Santos",
-            local: "Bloco B, 2º andar",
-            capacidade: "25 alunos",
-            tipo: "laboratório",
-        },
-    ];
+    useEffect(() => {
+        fetchRecursos();
+    }, []);
+
+    async function fetchRecursos() {
+        setLoading(true);
+        setError("");
+        let query = supabase.from('recursos').select('*').order('tipo_recurso', { ascending: true });
+        if (search) query = query.ilike('tipo_recurso', `%${search}%`);
+        const { data, error } = await query;
+        if (error) setError("Erro ao buscar recursos");
+        else setRecursos(data);
+        setLoading(false);
+    }
+
+    function openModal(type, recurso=null) {
+        setModalType(type);
+        setShowModal(true);
+        setSelected(recurso);
+        setForm(recurso ? {
+            ...recurso
+        } : initialForm);
+    }
+
+    function closeModal() {
+        setShowModal(false);
+        setSelected(null);
+        setForm(initialForm);
+    }
+
+    async function handleSubmit(e) {
+        e.preventDefault();
+        setLoading(true);
+        setError("");
+        if (modalType === "add") {
+            const { error } = await supabase.from('recursos').insert([form]);
+            if (error) setError("Erro ao cadastrar recurso");
+        } else if (modalType === "edit" && selected) {
+            const { error } = await supabase.from('recursos').update(form).eq('id', selected.id);
+            if (error) setError("Erro ao atualizar recurso");
+        }
+        closeModal();
+        fetchRecursos();
+    }
+
+    async function handleDelete(id) {
+        if (!window.confirm("Deseja realmente excluir este recurso?")) return;
+        setLoading(true);
+        await supabase.from('recursos').delete().eq('id', id);
+        fetchRecursos();
+    }
 
     return (
         <div className="dashboard-page">
