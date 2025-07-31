@@ -1,42 +1,75 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { getCurrentUser, onAuthStateChange } from '../services/authService';
+import { supabase } from '../supaBaseClient';
 
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-    const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true);
+    const [session, setSession] = useState({
+        user: null,
+        profile: null,
+        loading: true,
+    });
 
     useEffect(() => {
-        // Tenta pegar o usuário da sessão quando o app carrega
-        async function checkUser() {
-            const currentUser = await getCurrentUser();
-            setUser(currentUser);
-            setLoading(false);
-        }
+        /**
+         * Busca o perfil do usuário e atualiza o estado final da sessão.
+         * @param {object} user - O objeto de usuário do Supabase Auth.
+         */
+        const fetchProfile = async (user) => {
+            try {
+                const { data, error } = await supabase
+                    .from('usuarios')
+                    .select('perfil, nome_completo')
+                    .eq('user_id', user.id)
+                    .maybeSingle(); // Ótima escolha, continua aqui!
 
-        checkUser();
+                if (error) throw error;
 
-        // Escuta por futuras mudanças (login/logout)
-        const subscription = onAuthStateChange(setUser);
+                // Atualiza o estado com o perfil e FINALIZA o carregamento
+                setSession({ user, profile: data, loading: false });
 
-        // Limpa o listener quando o componente desmontar
-        return () => subscription.unsubscribe();
+                // --- Seus console.logs para depuração ---
+                console.log("Sessão finalizada:", { user, profile: data });
+                // ------------------------------------
+
+            } catch (error) {
+                console.error("Erro ao buscar perfil:", error.message);
+                // Mesmo com erro, finaliza o carregamento para não travar
+                setSession({ user, profile: null, loading: false });
+            }
+        };
+
+        // onAuthStateChange já lida com o estado inicial, login e logout.
+        const { data: { subscription } } = supabase.auth.onAuthStateChange(
+            async (_event, session) => {
+                const currentUser = session?.user;
+                if (currentUser) {
+                    // Se há um usuário, busca o perfil. O loading será finalizado dentro de fetchProfile.
+                    fetchProfile(currentUser);
+                } else {
+                    // Se não há usuário (logout ou sessão expirada), finaliza o carregamento.
+                    setSession({ user: null, profile: null, loading: false });
+                }
+            }
+        );
+
+        return () => {
+            subscription.unsubscribe();
+        };
     }, []);
 
     const value = {
-        user,
-        // Futuramente podemos expor as funções de login/logout aqui
+        user: session.user,
+        profile: session.profile,
     };
 
     return (
         <AuthContext.Provider value={value}>
-            {!loading && children}
+            {session.loading ? <p>Carregando...</p> : children}
         </AuthContext.Provider>
     );
 }
 
-// Hook customizado para facilitar o uso do contexto
 export function useAuth() {
     return useContext(AuthContext);
 }

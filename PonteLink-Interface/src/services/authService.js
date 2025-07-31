@@ -1,7 +1,10 @@
 import { supabase } from '../supaBaseClient';
 
 /**
+ * ⚠️ CADASTRO PÚBLICO DESABILITADO ⚠️
  * Realiza o cadastro de um novo usuário.
+ * Esta função irá falhar se o cadastro público estiver desabilitado no painel do Supabase.
+ * A criação de novos usuários agora deve ser feita pela função `adminCreateUser`.
  * @param {string} email 
  * @param {string} password 
  * @returns {Promise<object>}
@@ -38,6 +41,31 @@ export async function signOut() {
     const { error } = await supabase.auth.signOut();
     if (error) throw error;
 }
+
+// ===================================================================
+// ✨ NOVA FUNÇÃO DE ADMINISTRADOR ADICIONADA ✨
+// ===================================================================
+
+/**
+ * (Admin) Chama a Função de Borda para criar um novo usuário.
+ * Esta função só pode ser executada com sucesso por um usuário logado com perfil de admin.
+ * @param {string} newEmail O email do novo usuário a ser criado.
+ * @param {string} newPassword A senha para o novo usuário.
+ * @returns {Promise<any>} Os dados do usuário recém-criado.
+ */
+export async function adminCreateUser(newEmail, newPassword) {
+    const { data, error } = await supabase.functions.invoke('admin-create-user', {
+        body: { email: newEmail, password: newPassword },
+    });
+
+    if (error) {
+        throw error;
+    }
+
+    return data;
+}
+
+// ===================================================================
 
 /**
  * Obtém os dados do usuário logado na sessão atual.
