@@ -10,8 +10,6 @@ export function useEscolas() {
     const [escolas, setEscolas] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-
-    // ADICIONADO: Estado para controlar a visibilidade do modal de formulário
     const [showModal, setShowModal] = useState(false);
 
     /**
