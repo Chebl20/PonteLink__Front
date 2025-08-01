@@ -1,14 +1,7 @@
-// src/services/oficinaService.js
 
 import { supabase } from '../supaBaseClient.jsx'; // Verifique se o caminho do cliente Supabase está correto
 import { Oficina } from '../models/Oficina.js';   // Importa o modelo de dados para Oficina
 
-/**
- * NOTA DE ARQUITETURA:
- * Este serviço gerencia as operações CRUD para a entidade 'Oficina'.
- * Cada oficina está associada a uma 'Escola' através da chave estrangeira 'escola_id'.
- * A estrutura foi padronizada para manter consistência com outros serviços da aplicação.
- */
 
 /**
  * Função auxiliar para mapear os dados brutos do banco de dados para uma instância de Oficina.

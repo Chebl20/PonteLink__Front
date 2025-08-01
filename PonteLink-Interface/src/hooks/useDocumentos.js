@@ -15,6 +15,7 @@ export function useDocumentos({ escola_id, oficina_id }) {
     const [documentos, setDocumentos] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [showModal, setShowModal] = useState(false); // Adicionado para consistência
 
     const fetchDocumentos = useCallback(async () => {
         // Só busca se um dos IDs for fornecido
@@ -35,6 +36,7 @@ export function useDocumentos({ escola_id, oficina_id }) {
             }
             setDocumentos(data);
         } catch (err) {
+            console.error("Falha ao buscar documentos:", err); // Log de erro adicionado
             setError(err.message);
         } finally {
             setLoading(false);
@@ -45,24 +47,58 @@ export function useDocumentos({ escola_id, oficina_id }) {
         fetchDocumentos();
     }, [fetchDocumentos]);
 
+    /**
+     * Adiciona um novo documento e atualiza a lista.
+     * @param {object} documentoData - Os dados do documento a ser criado.
+     */
     const addDocumento = async (documentoData) => {
-        // Garante que o ID do contexto (escola ou oficina) seja adicionado
-        const dataToCreate = { ...documentoData };
-        if (oficina_id) dataToCreate.oficina_id = oficina_id;
-        else if (escola_id) dataToCreate.escola_id = escola_id;
+        try {
+            // Garante que o ID do contexto (escola ou oficina) seja adicionado
+            const dataToCreate = { ...documentoData };
+            if (oficina_id) {
+                dataToCreate.oficina_id = oficina_id;
+            } else if (escola_id) {
+                dataToCreate.escola_id = escola_id;
+            }
 
-        await createDocumento(dataToCreate);
-        await fetchDocumentos();
+            await createDocumento(dataToCreate);
+            await fetchDocumentos(); // Re-busca a lista
+        } catch (err) {
+            console.error("Falha ao adicionar documento:", err);
+            throw err; // Propaga o erro para a UI
+        }
     };
 
+    /**
+     * Edita um documento existente e atualiza a lista.
+     * @param {number} id - O ID do documento a ser editado.
+     * @param {object} documentoData - Os novos dados do documento.
+     */
     const editDocumento = async (id, documentoData) => {
-        await updateDocumento(id, documentoData);
-        await fetchDocumentos();
+        try {
+            await updateDocumento(id, documentoData);
+            await fetchDocumentos(); // Re-busca para refletir as alterações
+        } catch (err) {
+            console.error("Falha ao editar documento:", err);
+            throw err;
+        }
     };
 
+    /**
+     * Remove um documento com atualização otimista da UI.
+     * @param {number} id - O ID do documento a ser removido.
+     */
     const removeDocumento = async (id) => {
-        await deleteDocumento(id);
-        setDocumentos(currentDocs => currentDocs.filter(doc => doc.id !== id));
+        try {
+            // Atualização otimista da UI para resposta rápida
+            setDocumentos(currentDocs => currentDocs.filter(doc => doc.id !== id));
+            await deleteDocumento(id);
+        } catch (err) {
+            console.error("Falha ao remover documento:", err);
+            // Reverte a alteração na UI se a API falhar
+            await fetchDocumentos();
+            throw err;
+        }
     };
 
     return {
@@ -73,5 +109,7 @@ export function useDocumentos({ escola_id, oficina_id }) {
         editDocumento,
         removeDocumento,
         fetchDocumentos,
+        showModal,      // Adicionado
+        setShowModal,   // Adicionado
     };
 }

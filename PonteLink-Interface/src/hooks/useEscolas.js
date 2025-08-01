@@ -12,9 +12,7 @@ export function useEscolas() {
     const [error, setError] = useState(null);
     const [showModal, setShowModal] = useState(false);
 
-    /**
-     * Busca a lista de escolas do serviço e atualiza o estado.
-     */
+
     const fetchEscolas = useCallback(async () => {
         try {
             setLoading(true);
@@ -29,7 +27,6 @@ export function useEscolas() {
         }
     }, []); // O array de dependências está vazio, pois não depende de props
 
-    // Efeito para buscar os dados quando o hook for utilizado pela primeira vez
     useEffect(() => {
         fetchEscolas();
     }, [fetchEscolas]);
@@ -88,9 +85,7 @@ export function useEscolas() {
         addEscola,
         editEscola,
         removeEscola,
-        fetchEscolas, // Exporta a função de fetch para re-busca manual se necessário
-
-        // ADICIONADO: Exporta o estado do modal e sua função de atualização
+        fetchEscolas,
         showModal,
         setShowModal,
     };

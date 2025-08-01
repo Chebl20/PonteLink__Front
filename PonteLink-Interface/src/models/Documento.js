@@ -1,14 +1,6 @@
-// src/services/documentoService.js
-
 import { supabase } from '../supaBaseClient.jsx'; // Verifique se o caminho do cliente Supabase está correto
 import { Documento } from '../models/Documento.js'; // Importa o modelo de dados para Documento
 
-/**
- * NOTA DE ARQUITETURA:
- * Este serviço gerencia as operações CRUD para a entidade 'Documento'.
- * Cada documento está associado a uma 'Escola' (via 'escola_id') ou a uma 'Oficina' (via 'oficina_id').
- * A estrutura foi padronizada para manter consistência com outros serviços da aplicação.
- */
 
 /**
  * Função auxiliar para mapear os dados brutos do banco de dados para uma instância de Documento.
