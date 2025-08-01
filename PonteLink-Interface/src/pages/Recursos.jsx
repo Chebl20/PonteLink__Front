@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Plus, Trash2, X } from "lucide-react"; // Ícones para ações
 import PageLayout from '../components/PageLayout';
 import { useRecursos } from '../hooks/useRecurso'; // Hook para gerenciar recursos
-import { getAllEscolas } from '../services/escolaService'; // Serviço para buscar escolas
+import { getAllEscolas } from '../services/EscolaService'; // Serviço para buscar escolas
 import recursosIconLarge from "../assets/recursos.png";
 import "../styles/recursos.css"; // Seus estilos existentes
 
