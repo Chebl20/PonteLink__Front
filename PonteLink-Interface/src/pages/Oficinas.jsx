@@ -1,7 +1,8 @@
-import "../styles/oficinas.css";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Bell, User, Plus, Loader2, X, Trash2 } from "lucide-react";
+import PageLayout from "../components/PageLayout";
+import "../styles/oficinas.css";
 import dashboardIcon from "../assets/dashboard.png";
 import escolasIcon from "../assets/escolas.png";
 import oficinasIcon from "../assets/oficinas.png";
@@ -16,12 +17,16 @@ const initialForm = {
     semestre: "",
     tema_oficina: "",
     data_hora: "",
-    ano_escolar_alvo: ""
+    ano_escolar_alvo: "",
+    horario: "",
+    numero_alunos: "",
+    professor_responsavel: "",
+    turma: "",
+    observacao: "",
 };
 
 export default function Oficinas() {
     const [escolas, setEscolas] = useState([]);
-
     const [showModal, setShowModal] = useState(false);
     const [modalType, setModalType] = useState("add"); // add | edit | details
     const [selected, setSelected] = useState(null);
@@ -52,13 +57,11 @@ export default function Oficinas() {
         setLoading(false);
     }
 
-    function openModal(type, oficina=null) {
+    function openModal(type, oficina = null) {
         setModalType(type);
         setShowModal(true);
         setSelected(oficina);
-        setForm(oficina ? {
-            ...oficina
-        } : initialForm);
+        setForm(oficina ? { ...oficina } : initialForm);
     }
 
     function closeModal() {
@@ -66,6 +69,7 @@ export default function Oficinas() {
         setSelected(null);
         setForm(initialForm);
     }
+    
 
     async function handleSubmit(e) {
         e.preventDefault();
@@ -96,83 +100,48 @@ export default function Oficinas() {
     }
 
     return (
-        <div className="dashboard-page">
-            <div className="top-bar">
-                <div className="logo">PonteLink</div>
-                <div className="header-actions">
-                    <button className="notif-btn">
-                        <Bell size={18} color="#f3d512" /> Notificações
-                    </button>
-                    <button className="admin-btn">
-                        <User size={18} /> Gestor Admin
-                    </button>
-                </div>
+        <PageLayout className="oficinas-page">
+            <div className="page-header">
+                <h2>Planejamento de Oficinas</h2>
+                <button className="btn-purple" onClick={() => openModal("add")}>
+                    <Plus size={16} /> Nova Oficina
+                </button>
             </div>
 
-            <div className="nav-bar">
-                <Link to="/dashboard">
-                    <img src={dashboardIcon} alt="Dashboard" /> Dashboard
-                </Link>
-                <Link to="/escolas">
-                    <img src={escolasIcon} alt="Escolas" /> Escolas
-                </Link>
-                <Link to="/oficinas" className="active">
-                    <img src={oficinasIcon} alt="Oficinas" /> Oficinas
-                </Link>
-                <Link to="/turmas">
-                    <img src={turmasIcon} alt="Turmas" /> Turmas
-                </Link>
-                <Link to="/recursos">
-                    <img src={recursosIcon} alt="Recursos" /> Recursos
-                </Link>
-                <Link to="/documentos">
-                    <img src={documentosIcon} alt="Documentos" /> Documentos
-                </Link>
-            </div>
+            <input
+                type="text"
+                className="search-input"
+                placeholder="Buscar Oficinas..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+            />
 
-            <main className="dashboard-main-content">
-                <div className="header-oficinas">
-                    <h2>Planejamento de Oficinas</h2>
-                    <button className="btn-purple" onClick={() => openModal("add")}>
-                        <Plus size={16} style={{ marginRight: "6px" }} /> Nova Oficina
-                    </button>
+            {loading ? (
+                <div className="loading">
+                    <Loader2 size={24} color="#f3d512" />
                 </div>
-
-                <input type="text" className="search-input" placeholder="Buscar Oficinas..." value={search} onChange={(e) => setSearch(e.target.value)} />
-
-                {loading ? (
-                    <div className="loading">
-                        <Loader2 size={24} color="#f3d512" />
-                    </div>
-                ) : error ? (
-                    <div className="error">
-                        {error}
-                    </div>
-                ) : (
-                    <div className="oficinas-grid">
-                        {oficinas.map((oficina, idx) => (
-                            <div key={idx} className="oficina-card">
-                                <div className="oficina-card-header">
-                                    <h3>{oficina.tema_oficina}</h3>
-                                    <span className="status-ativa">{oficina.status}</span>
-                                </div>
-                                <p className="oficina-description">{oficina.description}</p>
-                                <p><strong>Duração:</strong> {oficina.duracao}</p>
-                                <p><strong>Capacidade:</strong> {oficina.capacidade}</p>
-                                <div className="oficina-card-buttons">
-                                    <button className="btn-editar" onClick={() => openModal("edit", oficina)}>Editar</button>
-                                    <button className="btn-detalhes" onClick={() => openModal("details", oficina)}>Ver Detalhes</button>
-                                    <button className="btn-excluir" onClick={() => handleDelete(oficina.id)}>Excluir</button>
-                                </div>
+            ) : error ? (
+                <div className="error">{error}</div>
+            ) : (
+                <div className="oficinas-grid">
+                    {oficinas.map((oficina, idx) => (
+                        <div key={idx} className="oficina-card">
+                            <div className="oficina-card-header">
+                                <h3>{oficina.tema_oficina || oficina.title}</h3>
+                                <span className="status-ativa">{oficina.status}</span>
                             </div>
-                        ))}
-                    </div>
-                )}
-            </main>
-
-            <footer className="main-footer">
-                <span> 2025 PonteLink. Todos os direitos reservados.</span>
-            </footer>
+                            <p className="oficina-description">{oficina.description}</p>
+                            <p><strong>Duração:</strong> {oficina.duracao}</p>
+                            <p><strong>Capacidade:</strong> {oficina.capacidade}</p>
+                            <div className="oficina-card-buttons">
+                                <button className="btn-editar" onClick={() => openModal("edit", oficina)}>Editar</button>
+                                <button className="btn-detalhes" onClick={() => openModal("details", oficina)}>Ver Detalhes</button>
+                                <button className="btn-excluir" onClick={() => handleDelete(oficina.id)}>Excluir</button>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            )}
 
             {/* Modal */}
             {showModal && (
@@ -180,16 +149,26 @@ export default function Oficinas() {
                     <div className="modal wide">
                         <div className="modal-header">
                             <img src={computadorIcon} alt="Icon" />
-                            <h3>{modalType === "add" ? "Cadastrar Oficina" : modalType === "edit" ? "Editar Oficina" : "Detalhes da Oficina"}</h3>
+                            <h3>
+                                {modalType === "add"
+                                    ? "Cadastrar Oficina"
+                                    : modalType === "edit"
+                                    ? "Editar Oficina"
+                                    : "Detalhes da Oficina"}
+                            </h3>
                         </div>
                         <form className="modal-form" onSubmit={handleSubmit}>
-    <label>Escola:</label>
-    <select value={form.escola_id} onChange={e => setForm({ ...form, escola_id: e.target.value })} required>
-        <option value="">Selecione a escola</option>
-        {escolas.map(escola => (
-            <option key={escola.id} value={escola.id}>{escola.nome}</option>
-        ))}
-    </select>
+                            <label>Escola:</label>
+                            <select
+                                value={form.escola_id}
+                                onChange={e => setForm({ ...form, escola_id: e.target.value })}
+                                required
+                            >
+                                <option value="">Selecione a escola</option>
+                                {escolas.map(escola => (
+                                    <option key={escola.id} value={escola.id}>{escola.nome}</option>
+                                ))}
+                            </select>
                             <div className="form-row">
                                 <div>
                                     <label>Data:</label>
@@ -215,13 +194,13 @@ export default function Oficinas() {
                             <label>Observação:</label>
                             <input type="text" value={form.observacao} onChange={(e) => setForm({ ...form, observacao: e.target.value })} placeholder="Informações adicionais sobre a turma" />
                             {modalType !== "details" && (
-                                <button type="submit" className="btn-purple submit-btn" onClick={handleSubmit}>Salvar</button>
+                                <button type="submit" className="btn-purple submit-btn">Salvar</button>
                             )}
                             <button type="button" className="btn-cancel" onClick={closeModal}>Cancelar</button>
                         </form>
                     </div>
                 </div>
             )}
-        </div>
+        </PageLayout>
     );
 }

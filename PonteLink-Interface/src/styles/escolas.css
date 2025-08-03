@@ -1,30 +1,9 @@
-/* --- Estilos do Modal e Formulário --- */
+/* ========================================
+   ESTILOS PARA PÁGINA DE ESCOLAS
+   ======================================== */
 
-/* Fundo semi-transparente que cobre a tela */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.6);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-/* Container do formulário (o "card" do modal) */
-.form-container {
-  padding: 24px;
-  width: 100%;
-  max-width: 500px;
-  /* Largura máxima para o formulário */
-  /* A classe .escolas-table já fornece background, border-radius e shadow */
-}
-
-/* Cabeçalho do formulário */
-.header-escolas-page {
+/* --- Cabeçalho da Página (usando page-header do PageLayout) --- */
+.page-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -34,7 +13,7 @@
   position: relative;
 }
 
-.header-escolas-page::after {
+.page-header::after {
   content: '';
   position: absolute;
   bottom: -2px;
@@ -45,7 +24,7 @@
   border-radius: 1px;
 }
 
-.header-escolas-page h2 {
+.page-header h2 {
   margin: 0;
   font-size: 28px;
   font-weight: 600;
@@ -56,133 +35,53 @@
   gap: 12px;
 }
 
-.header-escolas-page h2::before {
+/* Ícone decorativo para o título */
+.escolas-page .page-header h2::before {
   content: '';
-  width: 32px;
-  height: 32px;
-  background: linear-gradient(135deg, #7c3aed, #a855f7);
+  background: #ffffff url('../assets/escolas.png') center/20px no-repeat;
+  width: 40px;
+  height: 40px;
   border-radius: 8px;
+  background-color: #7c3aed;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 16px;
-  position: relative;
+  flex-shrink: 0;
 }
 
-.header-escolas-page h2::before {
-  content: '';
-  background: #ffffff url('../assets/escolas.png') center/cover no-repeat;
-  width: 40px;
-  height: 40px;
-  border: 6px solid #ffffff;
-  font-size: 18px;
-}
-
-/* Área de ações */
-.header-escolas-page .actions {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.header-escolas {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 24px;
-  padding-bottom: 16px;
-  border-bottom: 1px solid #eee;
-  /* Linha de separação sutil */
-}
-
-.header-escolas h2 {
-  margin: 0;
-  font-size: 20px;
-  color: #333;
-}
-
-/* Botão de fechar (X) */
-.close-button {
-  background: transparent;
+/* --- Botão Principal (Nova Escola) --- */
+.btn-purple {
+  background: linear-gradient(90deg, #6120d1 0%, #9333ea 100%);
   border: none;
-  font-size: 28px;
-  line-height: 1;
-  color: #888;
-  cursor: pointer;
-}
-
-.close-button:hover {
-  color: #333;
-}
-
-/* Grupo de formulário (label + input) */
-.form-group {
-  margin-bottom: 20px;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 8px;
-  font-weight: 600;
-  font-size: 14px;
-  color: #333;
-}
-
-/* Inputs e Selects do formulário */
-.search-input {
-  width: 100%;
-  padding: 10px 14px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  background-color: #f9f9f9;
-  font-size: 14px;
-  transition: border-color 0.3s, box-shadow 0.3s;
-}
-
-.search-input:focus {
-  outline: none;
-  border-color: #9333ea;
-  box-shadow: 0 0 0 3px rgba(147, 51, 234, 0.2);
-}
-
-/* Container dos botões de ação */
-.form-actions {
-  display: flex;
-  justify-content: flex-end;
-  /* Alinha botões à direita */
-  gap: 12px;
-  margin-top: 24px;
-}
-
-/* Botão de cancelar (secundário) */
-.btn-cancelar {
-  background-color: #f1f1f1;
-  border: 1px solid #ddd;
   border-radius: 8px;
   padding: 10px 16px;
-  color: #333;
+  color: #fff;
   font-weight: bold;
   font-size: 14px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-.btn-cancelar:hover {
-  background-color: #e5e5e5;
+.btn-purple:hover {
+  background: linear-gradient(90deg, #6b21a8 0%, #7c3aed 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
-/* --- Estilos da Tabela (Originais Mantidos) --- */
-
-/* Container da tabela */
+/* --- Container da Tabela --- */
 .table-container {
   background: white;
   border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   border: 1px solid #f1f5f9;
+  margin-top: 24px;
 }
 
-/* Tabela principal */
+/* --- Tabela Principal --- */
 .escolas-table {
   width: 100%;
   border-collapse: collapse;
@@ -249,7 +148,18 @@
   line-height: 1.4;
 }
 
-/* Área de ações */
+/* --- Status Badge --- */
+.status-ativa {
+  display: inline-block;
+  padding: 4px 10px;
+  background-color: #d1fae5;
+  color: #065f46;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* --- Área de Ações --- */
 .actions-cell {
   white-space: nowrap;
 }
@@ -261,7 +171,7 @@
   flex-wrap: wrap;
 }
 
-/* Botões de ação */
+/* --- Botões de Ação --- */
 .btn-action {
   padding: 8px 16px;
   border: none;
@@ -330,7 +240,7 @@
   box-shadow: 0 4px 8px rgba(239, 68, 68, 0.3);
 }
 
-/* Estados vazios */
+/* --- Estados Vazios --- */
 .empty-state {
   text-align: center;
   padding: 60px 20px;
@@ -355,7 +265,140 @@
   font-size: 14px;
 }
 
-/* Responsividade */
+/* ========================================
+   ESTILOS DO MODAL E FORMULÁRIO
+   ======================================== */
+
+/* Fundo semi-transparente que cobre a tela */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+/* Container do formulário (o "card" do modal) */
+.form-container {
+  display: flex;
+  flex-direction: column;
+  max-height: 85vh;
+  width: 800px;
+  max-width: 95%;
+  background-color: #ffffff;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+}
+
+/* Cabeçalho do formulário no modal */
+.header-escolas {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #eee;
+  flex-shrink: 0;
+}
+
+.header-escolas h2 {
+  margin: 0;
+  font-size: 20px;
+  color: #333;
+}
+
+/* Botão de fechar (X) */
+.close-button {
+  background: transparent;
+  border: none;
+  font-size: 28px;
+  line-height: 1;
+  color: #888;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.close-button:hover {
+  color: #333;
+}
+
+/* Grid do formulário com scroll */
+.form-grid {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding-right: 1rem;
+  padding-left: 2px;
+}
+
+/* Grupo de formulário (label + input) */
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  color: #333;
+}
+
+/* Inputs e Selects do formulário */
+.search-input {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
+  font-size: 14px;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #9333ea;
+  box-shadow: 0 0 0 3px rgba(147, 51, 234, 0.2);
+}
+
+/* Container dos botões de ação no formulário */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+  border-top: 1px solid #e2e8f0;
+  padding-top: 1rem;
+  flex-shrink: 0;
+}
+
+/* Botão de cancelar (secundário) */
+.btn-cancelar {
+  background-color: #f1f1f1;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px 16px;
+  color: #333;
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn-cancelar:hover {
+  background-color: #e5e5e5;
+}
+
+/* ========================================
+   RESPONSIVIDADE
+   ======================================== */
+
 @media (max-width: 1024px) {
   .escolas-table th,
   .escolas-table td {
@@ -378,6 +421,23 @@
 }
 
 @media (max-width: 768px) {
+  /* Ajusta o header da página */
+  .page-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+  }
+  
+  .page-header h2 {
+    font-size: 20px;
+  }
+  
+  .btn-purple {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  /* Ajusta a tabela */
   .table-container {
     border-radius: 12px;
     margin: 0 -16px;
@@ -415,84 +475,11 @@
     width: 100%;
     padding: 8px 12px;
   }
+  
+  /* Ajusta o modal */
+  .form-container {
+    max-height: 90vh;
+    width: 100%;
+    padding: 20px;
+  }
 }
-
-
-
-.status-ativa {
-  display: inline-block;
-  padding: 4px 10px;
-  background-color: #d1fae5;
-  color: #065f46;
-  border-radius: 8px;
-  font-size: 12px;
-  font-weight: 500;
-}
-
-.btn-purple {
-  background: linear-gradient(90deg, #6120d1 0%, #9333ea 100%);
-  border: none;
-  border-radius: 8px;
-  padding: 10px 16px;
-  color: #fff;
-  font-weight: bold;
-  font-size: 14px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.btn-purple:hover {
-  background: linear-gradient(90deg, #6b21a8 0%, #7c3aed 100%);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-}
-
-/*
- * CSS para criar um modal com conteúdo rolável
- */
-
-/* 1. Transforma o container do formulário em um layout flexível vertical */
-.form-container {
-  display: flex;
-  flex-direction: column;
-  max-height: 85vh;
-  width: 800px;
-  max-width: 95%;
-
-  /* ADICIONE ESTA LINHA: */
-  background-color: #ffffff;
-
-  /* Outras propriedades já existentes */
-  padding: 24px;
-  border-radius: 12px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-}
-
-
-/* 3. Faz a área do formulário (o grid) crescer e ser a única parte rolável */
-.form-grid {
-  flex-grow: 1;
-  /* Permite que este elemento cresça e ocupe o espaço disponível */
-  overflow-y: auto;
-  /* A MÁGICA: Adiciona a barra de rolagem vertical SOMENTE se necessário */
-
-  /* Adiciona um preenchimento (padding) para o conteúdo não colar na barra de rolagem */
-  padding-right: 1rem;
-  padding-left: 2px;
-  /* Pequeno ajuste para alinhar com o header */
-}
-
-/* 4. Garante que o cabeçalho e as ações não encolham e não rolem */
-.header-escolas,
-.form-actions {
-  flex-shrink: 0;
-  /* Impede que esses elementos encolham */
-}
-
-/* 5. (Opcional) Adiciona uma pequena borda para separar visualmente as áreas */
-.form-actions {
-  border-top: 1px solid #e2e8f0;
-  padding-top: 1rem;
-  margin-top: 1rem;
-}
-

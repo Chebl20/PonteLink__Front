@@ -1,6 +1,6 @@
 // src/components/PageLayout.jsx
 import React from 'react';
-import Header from './Header';
+import Header from './TopBar';
 import NavBar from './NavBar';
 import '../styles/page-layout.css';
 
