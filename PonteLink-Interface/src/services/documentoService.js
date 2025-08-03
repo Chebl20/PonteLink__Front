@@ -1,135 +1,153 @@
-import { supabase } from '../supaBaseClient.jsx'; // Verifique o caminho
-import { Escola } from '../models/Escola.js';
-import { Endereco } from '../models/Endereco.js';
+import { supabase } from '../supaBaseClient.jsx'; // Verifique se o caminho do cliente Supabase está correto
+import { Documento } from '../models/Documento.js'; // Importa o modelo de dados para Documento
+
 
 /**
- * NOTA DE ARQUITETURA:
- * Este serviço foi ajustado para uma estrutura de banco de dados onde a tabela 'enderecos'
- * possui uma coluna de chave estrangeira 'escola_id' que aponta para a tabela 'escolas'.
- * Isso representa uma relação um-para-um.
+ * Função auxiliar para mapear os dados brutos do banco de dados para uma instância de Documento.
+ * @param {object} dbData - Os dados brutos retornados pelo Supabase.
+ * @returns {Documento | null} Uma instância de Documento ou null se não houver dados.
  */
-
-/**
- * Função auxiliar para mapear dados do DB para uma instância de Escola.
- * Lida com o objeto de endereço aninhado que vem da consulta.
- */
-function _mapToEscolaInstance(dbData) {
+function _mapToDocumentoInstance(dbData) {
     if (!dbData) return null;
-
-    // Para uma relação um-para-um, o Supabase geralmente retorna o item relacionado como um objeto, não um array.
-    const enderecoData = dbData.enderecos;
-    const enderecoInstance = enderecoData ? new Endereco(enderecoData) : null;
-
-    // Remove a propriedade 'enderecos' para não duplicar dados no construtor da Escola.
-    const { enderecos, ...escolaData } = dbData;
-
-    return new Escola({ ...escolaData, endereco: enderecoInstance });
+    return new Documento(dbData);
 }
 
 /**
- * Busca todas as escolas e seus respectivos endereços.
+ * Busca todos os documentos de todas as escolas e oficinas.
+ * @returns {Promise<Documento[]>} Uma lista de todos os documentos.
  */
-export async function getAllEscolas() {
+export async function getAllDocumentos() {
     const { data, error } = await supabase
-        .from('escolas')
-        // A '!' indica ao Supabase que a chave estrangeira está na tabela 'enderecos'.
-        .select('*, enderecos!escola_id(*)')
-        .order('nome', { ascending: true });
+        .from('documentos')
+        .select('*')
+        .order('data_atualizacao', { ascending: false }); // Mais recentes primeiro
 
     if (error) {
-        console.error("Erro ao buscar escolas com endereços:", error);
-        throw new Error("Não foi possível buscar os dados das escolas.");
+        console.error("Erro Supabase (get all documentos):", error);
+        throw new Error(`Erro ao buscar todos os documentos: ${error.message}`);
     }
-    return data.map(_mapToEscolaInstance);
+    return data.map(_mapToDocumentoInstance);
 }
 
 /**
- * Cria uma nova escola e seu endereço associado.
+ * Busca todos os documentos de uma escola específica.
+ * @param {number} escola_id - O ID da escola para a qual os documentos serão buscados.
+ * @returns {Promise<Documento[]>} Uma lista de instâncias de Documento.
  */
-export async function createEscola(escolaData) {
-    const { endereco, ...dadosPrincipaisEscola } = escolaData;
+export async function getDocumentosByEscola(escola_id) {
+    const { data, error } = await supabase
+        .from('documentos')
+        .select('*')
+        .eq('escola_id', escola_id)
+        .order('data_atualizacao', { ascending: false });
 
-    if (!dadosPrincipaisEscola.nome) throw new Error("O campo 'nome' é obrigatório.");
-    if (!endereco) throw new Error("Dados de endereço são obrigatórios.");
-
-    // Passo 1: Inserir a escola (sem endereço) para obter um ID.
-    const { data: escolaCriada, error: erroEscola } = await supabase
-        .from('escolas')
-        .insert([dadosPrincipaisEscola])
-        .select('id')
-        .single();
-
-    if (erroEscola) {
-        console.error("Erro Supabase (create escola):", erroEscola);
-        throw new Error(`Erro ao criar a escola: ${erroEscola.message}`);
+    if (error) {
+        console.error("Erro Supabase (get documentos by escola):", error);
+        throw new Error(`Erro ao buscar os documentos da escola: ${error.message}`);
     }
-
-    // Passo 2: Preparar e inserir o endereço, incluindo a referência para a escola recém-criada.
-    const dadosEndereco = { ...endereco, escola_id: escolaCriada.id };
-    const { error: erroEndereco } = await supabase
-        .from('enderecos')
-        .insert([dadosEndereco]);
-
-    if (erroEndereco) {
-        console.error("Erro Supabase (create endereço):", erroEndereco);
-        // Limpeza: se a criação do endereço falhar, remove a escola órfã.
-        await supabase.from('escolas').delete().eq('id', escolaCriada.id);
-        throw new Error(`Erro ao criar o endereço: ${erroEndereco.message}`);
-    }
-
-    // Passo 3: Buscar e retornar a escola recém-criada com todos os dados aninhados.
-    const { data: dadosFinais } = await supabase
-        .from('escolas')
-        .select('*, enderecos!escola_id(*)')
-        .eq('id', escolaCriada.id)
-        .single();
-
-    return _mapToEscolaInstance(dadosFinais);
+    return data.map(_mapToDocumentoInstance);
 }
 
 /**
- * ATUALIZA uma escola e/ou seu endereço.
+ * Busca todos os documentos de uma oficina específica.
+ * @param {number} oficina_id - O ID da oficina para a qual os documentos serão buscados.
+ * @returns {Promise<Documento[]>} Uma lista de instâncias de Documento.
  */
-export async function updateEscola(id, escolaData) {
-    const { endereco, ...dadosPrincipaisEscola } = escolaData;
+export async function getDocumentosByOficina(oficina_id) {
+    const { data, error } = await supabase
+        .from('documentos')
+        .select('*')
+        .eq('oficina_id', oficina_id)
+        .order('data_atualizacao', { ascending: false });
 
-    // Atualiza os dados principais da escola, se houver.
-    if (Object.keys(dadosPrincipaisEscola).length > 0) {
-        const { error } = await supabase.from('escolas').update(dadosPrincipaisEscola).eq('id', id);
-        if (error) throw new Error(`Erro ao atualizar dados da escola: ${error.message}`);
+    if (error) {
+        console.error("Erro Supabase (get documentos by oficina):", error);
+        throw new Error(`Erro ao buscar os documentos da oficina: ${error.message}`);
     }
+    return data.map(_mapToDocumentoInstance);
+}
 
-    // Se dados de endereço foram enviados, atualiza o endereço correspondente.
-    if (endereco) {
-        const { error } = await supabase.from('enderecos').update(endereco).eq('escola_id', id);
-        if (error) throw new Error(`Erro ao atualizar dados do endereço: ${error.message}`);
-    }
-
-    // Retorna a escola completamente atualizada com o endereço.
-    const { data: dadosFinais } = await supabase
-        .from('escolas')
-        .select('*, enderecos!escola_id(*)')
+/**
+ * Busca um documento específico pelo seu ID.
+ * @param {number} id - O ID do documento a ser buscado.
+ * @returns {Promise<Documento>} A instância do documento encontrado.
+ */
+export async function getDocumentoById(id) {
+    const { data, error } = await supabase
+        .from('documentos')
+        .select('*')
         .eq('id', id)
         .single();
 
-    return _mapToEscolaInstance(dadosFinais);
+    if (error) {
+        console.error("Erro Supabase (get documento by id):", error);
+        throw new Error(`Erro ao buscar o documento: ${error.message}`);
+    }
+    return _mapToDocumentoInstance(data);
+}
+
+
+/**
+ * Cria um novo documento no banco de dados.
+ * @param {object} documentoData - Os dados do novo documento. Deve incluir 'escola_id' ou 'oficina_id'.
+ * @returns {Promise<Documento>} A instância do documento recém-criado.
+ */
+export async function createDocumento(documentoData) {
+    if (!documentoData.escola_id && !documentoData.oficina_id) {
+        throw new Error("O documento deve estar associado a um 'escola_id' ou 'oficina_id'.");
+    }
+
+    const { data, error } = await supabase
+        .from('documentos')
+        .insert([documentoData])
+        .select()
+        .single(); // Retorna o objeto recém-criado
+
+    if (error) {
+        console.error("Erro Supabase (create documento):", error);
+        throw new Error(`Erro ao criar o documento: ${error.message}`);
+    }
+    return _mapToDocumentoInstance(data);
 }
 
 /**
- * DELETA uma escola e seu endereço associado.
+ * ATUALIZA um documento existente no banco de dados.
+ * @param {number} id - O ID do documento a ser atualizado.
+ * @param {object} documentoData - Os novos dados para o documento.
+ * @returns {Promise<Documento>} A instância do documento atualizado.
  */
-export async function deleteEscola(id) {
-    // Para respeitar a restrição da chave estrangeira, deletamos o endereço dependente primeiro.
-    const { error: erroEndereco } = await supabase.from('enderecos').delete().eq('escola_id', id);
-    if (erroEndereco) {
-        console.error("Erro ao deletar endereço associado:", erroEndereco);
-        // Dependendo da sua regra de negócio, você pode querer parar aqui ou continuar.
-    }
+export async function updateDocumento(id, documentoData) {
+    // Adiciona a data de atualização automaticamente
+    documentoData.data_atualizacao = new Date().toISOString();
 
-    // Em seguida, deletamos a escola principal.
-    const { error: erroEscola } = await supabase.from('escolas').delete().eq('id', id);
-    if (erroEscola) {
-        console.error("Erro ao deletar escola:", erroEscola);
-        throw new Error("Não foi possível deletar a escola.");
+    const { data, error } = await supabase
+        .from('documentos')
+        .update(documentoData)
+        .eq('id', id)
+        .select()
+        .single(); // Retorna o objeto atualizado
+
+    if (error) {
+        console.error("Erro Supabase (update documento):", error);
+        throw new Error(`Erro ao atualizar o documento: ${error.message}`);
     }
+    return _mapToDocumentoInstance(data);
+}
+
+/**
+ * DELETA um documento do banco de dados.
+ * @param {number} id - O ID do documento a ser deletado.
+ * @returns {Promise<void>}
+ */
+export async function deleteDocumento(id) {
+    const { error } = await supabase
+        .from('documentos')
+        .delete()
+        .eq('id', id);
+
+    if (error) {
+        console.error("Erro Supabase (delete documento):", error);
+        throw new Error(`Erro ao deletar o documento: ${error.message}`);
+    }
+    // A operação de delete não retorna conteúdo em caso de sucesso.
 }
