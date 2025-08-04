@@ -1,94 +1,215 @@
-.header-turmas {
+/* Geral */
+.turmas-page .page-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 16px;
+    margin-bottom: 1.5rem;
 }
 
-.header-turmas h2 {
-    margin: 0;
-    font-size: 20px;
-    color: #333;
+.header-actions {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+/* Estilos do seletor de escola */
+.escola-selector-container {
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: #f9fafb;
+    padding: 0.75rem;
+    border-radius: 8px;
+}
+
+.escola-selector-container label {
+    font-weight: 500;
+    color: #374151;
+}
+
+.escola-select {
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    border: 1px solid #d1d5db;
+    background-color: white;
+    flex-grow: 1;
+}
+
+/* Estilos da busca */
+.search-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search-icon {
+    position: absolute;
+    left: 10px;
+    color: #6b7280;
 }
 
 .search-input {
-    width: 100%;
-    padding: 10px 14px;
+    padding: 0.6rem 1rem 0.6rem 2.5rem; /* Espaço para o ícone */
     border-radius: 8px;
-    border: none;
-    background-color: #eee;
-    margin-bottom: 20px;
-    font-size: 14px;
+    border: 1px solid #d1d5db;
+    min-width: 250px;
 }
 
-.turmas-table {
+/* Grid e Cards */
+.turmas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+}
+
+.turma-card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    padding: 1.5rem;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    border: 1px solid #e5e7eb;
 }
 
-.turmas-table-header,
-.turmas-table-row {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr;
-    align-items: center;
-    padding: 12px;
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+.turma-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
 }
 
-.turmas-table-header {
-    font-weight: bold;
-    background: #f2f2f2;
+.turma-card-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #1f2937;
 }
 
-.turmas-table-row div:first-child {
+.card-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.turma-card-detail {
+    font-size: 0.9rem;
+    color: #4b5563;
+    margin: 0.2rem 0;
+}
+
+.turma-card-description {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    color: #6b7280;
+    flex-grow: 1;
+}
+
+/* Modal Styles */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
     display: flex;
     align-items: center;
-    gap: 8px;
+    justify-content: center;
+    z-index: 1000;
 }
 
-.turmas-table-row img {
-    width: 24px;
-    height: 24px;
+.modal {
+    background: white;
+    border-radius: 12px;
+    padding: 0;
+    width: 90%;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
 }
 
-.turmas-table-row p {
+.modal.wide {
+    max-width: 650px;
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.modal-header img {
+    width: 32px;
+    height: 32px;
+}
+
+.modal-header h3 {
     margin: 0;
-    font-size: 12px;
-    color: #666;
+    font-size: 1.25rem;
+    font-weight: 600;
 }
 
-.turma-nome {
+.close-modal-btn {
+    margin-left: auto;
+}
+
+.modal-form {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    overflow-y: auto;
+}
+
+.modal-form label {
     font-weight: 500;
+    font-size: 0.9rem;
 }
 
-.btn-editar {
-    background: #f0abfc;
-    border: none;
-    padding: 6px 10px;
+.modal-form input,
+.modal-form select {
+    width: 100%;
+    padding: 0.75rem;
     border-radius: 6px;
-    cursor: pointer;
-    color: #333;
+    border: 1px solid #d1d5db;
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: flex-end;
+    padding: 1.25rem 1.5rem;
+    border-top: 1px solid #e5e7eb;
+    background-color: #f9fafb;
+}
+
+.submit-btn {
     font-weight: 500;
-    margin-right: 6px;
 }
 
-.btn-detalhes {
-    background: #c7d2fe;
-    border: none;
-    padding: 6px 10px;
-    border-radius: 6px;
-    cursor: pointer;
-    color: #333;
-    font-weight: 500;
+.error-message {
+    color: #ef4444;
+    background-color: #fee2e2;
+    padding: 1rem;
+    border-radius: 8px;
+    text-align: center;
 }
 
-.btn-editar:hover {
-    background: #e879f9;
+.error-message-small {
+    color: #ef4444;
+    font-size: 0.8rem;
+    margin-top: -0.75rem;
 }
 
-.btn-detalhes:hover {
-    background: #a5b4fc;
+.btn-danger {
+    background-color: #ef4444;
+    color: white;
+}
+
+.btn-danger:hover {
+    background-color: #dc2626;
 }

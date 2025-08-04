@@ -10,6 +10,7 @@ import Documentos from "./pages/Documentos";
 import LoginPage from "./pages/LoginPage.jsx";
 import CreateUserPage from "./pages/CreateUserPage";
 
+
 // Importe os componentes de rota
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import AdminRoute from "./components/AdminRoute.jsx"; // <<< 2. IMPORTE A ROTA DE ADMIN
@@ -46,6 +47,7 @@ const router = createBrowserRouter([
                 path: '/turmas',
                 element: <Turmas />
             },
+            
             {
                 path: '/recursos',
                 element: <Recursos />
