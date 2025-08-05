@@ -291,6 +291,103 @@
     color: #6B7280;
 }
 
+/* Cronograma de Oficinas */
+.cronograma-card {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 24px;
+    width: 100%;
+}
+
+.cronograma-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid #f5f5f5;
+}
+
+.cronograma-header h2 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    color: #5B3F9E;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.cronograma-subtitle {
+    color: #666;
+    font-size: 14px;
+    background: #f8f9fa;
+    padding: 4px 12px;
+    border-radius: 20px;
+}
+
+/* Tabela do Cronograma */
+.cronograma-table {
+    width: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #e0e0e0;
+}
+
+.cronograma-table-header {
+    display: grid;
+    grid-template-columns: 100px 120px 2fr 1.5fr 80px 100px;
+    background: linear-gradient(135deg, #5B3F9E 0%, #7B5FC7 100%);
+    color: white;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 0;
+}
+
+.cronograma-table-header > div {
+    padding: 16px 12px;
+    display: flex;
+    align-items: center;
+    border-right: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.cronograma-table-header > div:last-child {
+    border-right: none;
+}
+
+.cronograma-table-body {
+    background: white;
+}
+
+.cronograma-row {
+    display: grid;
+    grid-template-columns: 100px 120px 2fr 1.5fr 80px 100px;
+    border-bottom: 1px solid #f0f0f0;
+    transition: background-color 0.2s ease;
+}
+
+.cronograma-row:hover {
+    background-color: #f8f9ff;
+}
+
+.cronograma-row:last-child {
+    border-bottom: none;
+}
+
+.cronograma-row > div {
+    padding: 16px 12px;
+    display: flex;
+    align-items: center;
+    border-right: 1px solid #f0f0f0;
+    font-size: 14px;
+}
+
+.cronograma-row > div:last-child {
+    border-right: none;
+}
+
 
 @keyframes pulse-gentle {
     0%, 100% { 
