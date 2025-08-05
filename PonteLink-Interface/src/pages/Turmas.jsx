@@ -7,12 +7,17 @@ import { Plus, Trash2, Edit, X, Search } from 'lucide-react';
 import turmasIconLarge from "../assets/turmas.png";
 import '../styles/turmas.css';
 import '../styles/detalhes.css'; // Reusing some styles
+import { useLocation, useNavigate } from 'react-router-dom';
+// import React, { useState, useEffect } from 'react';
 
 export default function TurmasPage() {
     const [escolas, setEscolas] = useState([]);
     const [oficinas, setOficinas] = useState([]);
     const [escolasError, setEscolasError] = useState(null);
     const [oficinasError, setOficinasError] = useState(null);
+
+    const location = useLocation();
+    const navigate = useNavigate();
 
     // We need to manage the selected school at this level
     const [selectedEscolaId, setSelectedEscolaId] = useState('');
@@ -43,6 +48,16 @@ export default function TurmasPage() {
         descricao: ''
     };
     const [formData, setFormData] = useState(initialState);
+
+    // Handle modal state from navigation
+    useEffect(() => {
+            if (location.state?.abrirModal) {
+                setTurmaToEdit(null);
+                setShowModal(true);
+                // Clear the navigation state to prevent reopening on refresh
+                navigate(location.pathname, { replace: true, state: {} });
+            }
+        }, [location, navigate, setShowModal]);
 
     useEffect(() => {
         async function fetchData() {

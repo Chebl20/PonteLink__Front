@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useEscolas } from '../hooks/useEscolas.js';
 import EscolaList from '../components/escola/EscolaList.jsx';
 import EscolaForm from '../components/escola/EscolaForm.jsx';
 import EscolaDetalhes from '../components/escola/EscolaDetalhes.jsx';
+import { useLocation, useNavigate } from 'react-router-dom';
 import PageLayout from '../components/PageLayout.jsx';
 import { Plus } from 'lucide-react';
 
 export default function EscolasPage() {
+    const location = useLocation();
+    const navigate = useNavigate();
     const {
         escolas, loading, error, addEscola, editEscola, removeEscola,
         showModal, setShowModal,
@@ -21,6 +24,18 @@ export default function EscolasPage() {
         setShowModal(false);
         setEscolaToEdit(null);
     };
+
+     
+    // Handle modal state from navigation
+    useEffect(() => {
+        if (location.state?.abrirModal) {
+            setEscolaToEdit(null);
+            setShowModal(true);
+            // Clear the navigation state to prevent reopening on refresh
+            navigate(location.pathname, { replace: true, state: {} });
+        }
+    }, [location, navigate, setShowModal]);
+    
 
     const handleCloseDetalhes = () => {
         setShowDetalhesModal(false);

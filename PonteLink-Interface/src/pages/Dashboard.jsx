@@ -120,10 +120,9 @@ export default function Dashboard() {
         }
     };
 
-    const handleNovaOficina = () => navigate('/oficinas/nova');
-    const handleCadastrarEscola = () => navigate('/escolas/nova');
-    const handleCadastrarTurma = () => navigate('/turmas/nova');
-
+    const handleNovaOficina = () => navigate('/oficinas', { state: { abrirModal: true }});
+    const handleCadastrarEscola = () => navigate('/escolas', { state: { abrirModal: true }});
+    const handleCadastrarTurma = () => navigate('/turmas', { state: { abrirModal: true }});
     return (
         <PageLayout className="dashboard-page">
             {loading ? (

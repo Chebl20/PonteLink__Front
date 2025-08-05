@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useOficinas } from '../hooks/useOficinas';
 import { getAllEscolas } from '../services/EscolaService';
 import OficinaForm from '../components/oficina/OficinaForm';
@@ -8,6 +9,8 @@ import { Plus, Trash2 } from 'lucide-react';
 import '../styles/oficinas.css';
 
 export default function OficinasPage() {
+    const location = useLocation();
+    const navigate = useNavigate();
     const [escolas, setEscolas] = useState([]);
     const [escolaId, setEscolaId] = useState(null);
     const [searchTerm, setSearchTerm] = useState(''); // 🔍 Novo estado de busca
@@ -25,6 +28,16 @@ export default function OficinasPage() {
 
     const [oficinaToEdit, setOficinaToEdit] = useState(null);
     const [oficinaToView, setOficinaToView] = useState(null);
+    
+    // Handle modal state from navigation
+    useEffect(() => {
+        if (location.state?.abrirModal) {
+            setOficinaToEdit(null);
+            setShowModal(true);
+            // Clear the navigation state to prevent reopening on refresh
+            navigate(location.pathname, { replace: true, state: {} });
+        }
+    }, [location, navigate, setShowModal]);
 
     useEffect(() => {
         async function fetchEscolas() {
