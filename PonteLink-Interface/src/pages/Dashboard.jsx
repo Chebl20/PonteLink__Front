@@ -105,8 +105,8 @@ export default function Dashboard() {
     return (
         <PageLayout className="dashboard-page">
             {loading ? (
-                <div className="loading-container">
-                    <div className="loading-spinner">Carregando dados...</div>
+                <div className="loading-container-dashboard">
+                    <div className="loading-spinner-dashboard"></div>
                 </div>
             ) : (
                 <>

@@ -184,18 +184,22 @@
 }
 
 /* Loading and Empty States */
-.loading-container {
+.loading-container-dashboard {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 300px;
+    min-height: 500px;
+    width: 100%;
 }
 
-.loading-spinner {
-    font-size: 16px;
-    color: #5B3F9E;
-    text-align: center;
-    font-weight: 500;
+.loading-spinner-dashboard {
+    width: 50px;
+    height: 50px;
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid #5B3F9E;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    display: block;
 }
 
 .no-oficinas {
@@ -364,4 +368,9 @@
     .dashboard-main-content {
         max-width: 1600px;
     }
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
 }
