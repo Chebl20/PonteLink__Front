@@ -12,6 +12,7 @@ body {
     color: #333;
 }
 
+
 .login-container {
     min-height: 100vh;
     background: linear-gradient(135deg, #7c3aed, #8b5cf6, #a855f7);
@@ -63,6 +64,12 @@ body {
     text-align: center;
     margin-bottom: 2rem;
 }
+
+.logo-image {
+    width: 3rem;     
+    height: auto;
+}
+
 
 .login-logo {
     width: 4rem;

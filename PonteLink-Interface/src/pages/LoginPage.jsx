@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, Mail, Lock, AlertCircle } from 'lucide-react';
 import { signIn } from '../services/authService.js';
 import "../styles/login.css";
+import logo from '../assets/Branco@3x.png';
+
 
 export default function LoginPage() {
     const [email, setEmail] = useState('');
@@ -32,7 +34,9 @@ export default function LoginPage() {
         <div className="login-container">
             <div className="login-card">
                 <div className="login-header">
-                    <div className="login-logo">PL</div>
+                    <div className="login-logo">
+                        <img src={logo} alt="Logo PonteLink" className="logo-image" />
+                    </div>
                     <h1 className="login-title">PonteLink</h1>
                     <p className="login-subtitle">Conectando educação ao futuro</p>
                 </div>
