@@ -1,7 +1,7 @@
 // DocumentosPage.jsx
 import React, { useState, useEffect } from 'react';
 import { useDocumentos } from '../hooks/useDocumentos';
-import { getAllEscolas } from '../services/escolaService';
+import { getAllEscolas } from '../services/EscolaService';
 import DocumentoList from '../components/documento/DocumentoList.jsx';
 import DocumentoForm from '../components/documento/DocumentoForm.jsx';
 import DocumentoDetalhes from '../components/documento/DocumentoDetalhes.jsx';

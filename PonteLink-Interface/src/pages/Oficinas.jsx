@@ -1,7 +1,7 @@
 // OficinasPage.jsx
 import React, { useState, useEffect } from 'react';
 import { useOficinas } from '../hooks/useOficinas';
-import { getAllEscolas } from '../services/escolaService';
+import { getAllEscolas } from '../services/EscolaService';
 import OficinaForm from '../components/oficina/OficinaForm';
 import OficinaDetalhes from '../components/oficina/OficinaDetalhes';
 import PageLayout from '../components/PageLayout';
