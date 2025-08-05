@@ -5,7 +5,7 @@
 /* --- Ícone decorativo para o título --- */
 .oficinas-page .page-header h2::before {
   content: '';
-  background: #ffffff url('../assets/oficinas.png') center/20px no-repeat;
+  background: #ffffff url('../assets/oficina-branco.svg') center/20px no-repeat;
   width: 40px;
   height: 40px;
   border-radius: 8px;
