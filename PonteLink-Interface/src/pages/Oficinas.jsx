@@ -1,4 +1,3 @@
-// OficinasPage.jsx
 import React, { useState, useEffect } from 'react';
 import { useOficinas } from '../hooks/useOficinas';
 import { getAllEscolas } from '../services/EscolaService';
@@ -11,6 +10,7 @@ import '../styles/oficinas.css';
 export default function OficinasPage() {
     const [escolas, setEscolas] = useState([]);
     const [escolaId, setEscolaId] = useState(null);
+    const [searchTerm, setSearchTerm] = useState(''); // 🔍 Novo estado de busca
 
     const {
         oficinas,
@@ -64,6 +64,12 @@ export default function OficinasPage() {
         }
     };
 
+    // 🧠 Filtra oficinas por tema ou descrição
+    const oficinasFiltradas = oficinas.filter(oficina =>
+        oficina.tema_oficina.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (oficina.descricao && oficina.descricao.toLowerCase().includes(searchTerm.toLowerCase()))
+    );
+
     return (
         <PageLayout className="oficinas-page">
             <div className="page-header">
@@ -76,6 +82,16 @@ export default function OficinasPage() {
                 </button>
             </div>
 
+            {/* 🔍 Campo de busca */}
+            <input
+                type="text"
+                placeholder="Buscar por tema ou descrição..."
+                className="search-input"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                style={{ marginBottom: '1rem' }}
+            />
+
             {!escolaId ? (
                 <p>Carregando escolas...</p>
             ) : (
@@ -84,11 +100,15 @@ export default function OficinasPage() {
                     {error && <p style={{ color: 'red' }}>Erro: {error}</p>}
 
                     <div className="oficinas-grid">
-                        {oficinas.map((oficina) => (
+                        {oficinasFiltradas.map((oficina) => (
                             <div key={oficina.id} className="oficina-card">
                                 <div className="oficina-card-header">
                                     <h3>{oficina.tema_oficina}</h3>
-                                    <button className="btn-icon" onClick={() => removeOficina(oficina.id)} title="Excluir Oficina">
+                                    <button
+                                        className="btn-icon"
+                                        onClick={() => removeOficina(oficina.id)}
+                                        title="Excluir Oficina"
+                                    >
                                         <Trash2 size={18} />
                                     </button>
                                 </div>

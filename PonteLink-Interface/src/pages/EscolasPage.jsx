@@ -15,6 +15,7 @@ export default function EscolasPage() {
     const [escolaToEdit, setEscolaToEdit] = useState(null);
     const [escolaToView, setEscolaToView] = useState(null);
     const [showDetalhesModal, setShowDetalhesModal] = useState(false);
+    const [searchTerm, setSearchTerm] = useState(''); // 🔍 Estado do filtro de busca
 
     const handleCancel = () => {
         setShowModal(false);
@@ -56,6 +57,12 @@ export default function EscolasPage() {
         }
     };
 
+    // 🧠 Filtragem das escolas com base no termo de busca
+    const escolasFiltradas = escolas.filter(escola =>
+        escola.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (escola.descricao && escola.descricao.toLowerCase().includes(searchTerm.toLowerCase()))
+    );
+
     return (
         <PageLayout className="escolas-page">
             <div className="page-header">
@@ -68,12 +75,22 @@ export default function EscolasPage() {
                 </button>
             </div>
 
+            {/* 🔍 Campo de busca */}
+            <input
+                type="text"
+                placeholder="Buscar por nome ou descrição..."
+                className="search-input"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                style={{ marginBottom: '1rem' }}
+            />
+
             {loading && <p>Carregando escolas...</p>}
             {error && <p style={{ color: 'red' }}>Erro: {error}</p>}
 
             {!loading && !error && (
                 <EscolaList
-                    escolas={escolas}
+                    escolas={escolasFiltradas}
                     onEdit={handleEdit}
                     onDelete={handleDelete}
                     onViewDetails={handleViewDetails}
