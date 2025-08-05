@@ -56,9 +56,9 @@ export default function Dashboard() {
             const { data: proximasOficinas } = await supabase
                 .from('oficinas')
                 .select(`*, escolas (nome)`)
-                .gte('data_hora', hoje.toISOString())
-                .lte('data_hora', quinzeDiasDepois.toISOString())
+                .gte('data_hora', hoje.toISOString()) // apenas oficinas futuras
                 .order('data_hora', { ascending: true });
+
 
             if (proximasOficinas) {
                 const oficinasFormatadas = proximasOficinas.map(oficina => {
@@ -170,7 +170,7 @@ export default function Dashboard() {
                                     <Calendar size={20} />
                                     Cronograma de Oficinas
                                 </h2>
-                                <span className="cronograma-subtitle">Próximos 15 dias</span>
+                                <span className="cronograma-subtitle">Próximas Oficinas</span>
                             </div>
 
                             {cronogramaOficinas.length > 0 ? (
