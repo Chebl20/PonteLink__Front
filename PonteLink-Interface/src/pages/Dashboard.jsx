@@ -1,7 +1,7 @@
 // src/pages/Dashboard.jsx
 import "../styles/dashboard.css";
 import { useNavigate } from "react-router-dom";
-import { Plus } from "lucide-react";
+import { Plus, School, BookOpen, Users, FileWarning } from "lucide-react";
 import { useState, useEffect } from "react";
 import { supabase } from "../supaBaseClient";
 import PageLayout from "../components/PageLayout";
@@ -10,10 +10,10 @@ export default function Dashboard() {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
     const [stats, setStats] = useState([
-        { label: "Escolas Cadastradas", value: 0 },
-        { label: "Oficinas Ativas", value: 0 },
-        { label: "Turmas Cadastradas", value: 0 },
-        { label: "Docs Pendentes", value: 0 },
+        { label: "Escolas Cadastradas", value: 0, icon: <School color="#7e5bbe" />, color: '#f5f3ff' },
+        { label: "Oficinas Ativas", value: 0, icon: <BookOpen color="#5B3F9E" />, color: '#f3f0ff' },
+        { label: "Turmas Cadastradas", value: 0, icon: <Users color="#4A3283" />, color: '#f3f3f3' },
+        { label: "Docs Pendentes", value: 0, icon: <FileWarning color="#eab308" />, color: '#fffbe6' },
     ]);
     const [oficinas, setOficinas] = useState([]);
 
@@ -44,10 +44,10 @@ export default function Dashboard() {
                 .eq('status', 'pendente');
 
             setStats([
-                { label: "Escolas Cadastradas", value: escolasCount || 0 },
-                { label: "Oficinas Ativas", value: oficinasCount || 0 },
-                { label: "Turmas Cadastradas", value: turmasCount || 0 },
-                { label: "Docs Pendentes", value: docsCount || 0 },
+                { label: "Escolas Cadastradas", value: escolasCount || 0, icon: <School color="#7e5bbe" />, color: '#f5f3ff' },
+                { label: "Oficinas Ativas", value: oficinasCount || 0, icon: <BookOpen color="#5B3F9E" />, color: '#f3f0ff' },
+                { label: "Turmas Cadastradas", value: turmasCount || 0, icon: <Users color="#4A3283" />, color: '#f3f3f3' },
+                { label: "Docs Pendentes", value: docsCount || 0, icon: <FileWarning color="#eab308" />, color: '#fffbe6' },
             ]);
 
             const hoje = new Date();
@@ -112,8 +112,11 @@ export default function Dashboard() {
                 <>
                     <div className="dashboard-stats">
                         {stats.map((stat, idx) => (
-                            <div key={idx} className="stat-card">
-                                <div className="stat-value">{stat.value}</div>
+                            <div key={idx} className="stat-card" style={{background: stat.color}}>
+                                <div style={{display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8}}>
+                                    <span style={{background: '#fff', borderRadius: '50%', boxShadow: '0 2px 8px #e9e6f7', padding: 8, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>{stat.icon}</span>
+                                    <span className="stat-value">{stat.value}</span>
+                                </div>
                                 <div className="stat-label">{stat.label}</div>
                             </div>
                         ))}

@@ -150,6 +150,19 @@
 
 /* O modal-overlay e modal base já existem no CSS global */
 /* Aqui estão apenas os estilos específicos do modal de oficinas */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 20px;
+}
 
 .modal.wide {
   width: 700px;
@@ -250,6 +263,17 @@
 
 .btn-cancel:hover {
   background: #d1d5db;
+}
+
+/* Botão de fechar (X) */
+.close-button {
+  background: transparent;
+  border: none;
+  font-size: 28px;
+  line-height: 1;
+  color: #888;
+  cursor: pointer;
+  transition: color 0.3s;
 }
 
 /* ========================================
