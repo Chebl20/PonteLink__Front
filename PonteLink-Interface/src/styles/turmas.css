@@ -37,23 +37,23 @@
 }
 
 /* Estilos da busca */
-.search-container {
-    position: relative;
+.search-container-turmas {
     display: flex;
     align-items: center;
-}
-
-.search-icon {
-    position: absolute;
-    left: 10px;
-    color: #6b7280;
-}
-
-.search-input {
-    padding: 0.6rem 1rem 0.6rem 2.5rem; /* Espaço para o ícone */
+    gap: 5px;
+    padding: 10px 14px;
     border-radius: 8px;
-    border: 1px solid #d1d5db;
-    min-width: 250px;
+    background-color: #eee;
+    font-size: 14px;
+}
+
+
+.search-input-turmas {
+    border: none;
+    color: inherit;
+    background-color: transparent;
+    width: 33ch;
+    
 }
 
 /* Grid e Cards */

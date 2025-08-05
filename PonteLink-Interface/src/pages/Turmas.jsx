@@ -136,12 +136,12 @@ export default function TurmasPage() {
             <div className="page-header">
                 <h2>Gerenciamento de Turmas</h2>
                 <div className="header-actions">
-                    <div className="search-container">
+                    <div className="search-container-turmas">
                         <Search size={20} className="search-icon" />
                         <input
                             type="text"
                             placeholder="Buscar por nome ou descrição..."
-                            className="search-input"
+                            className="search-input-turmas"
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                         />
